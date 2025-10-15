@@ -1,0 +1,308 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class Player : MonoBehaviour
+{
+    private Rigidbody2D rb;
+    private BoxCollider2D col;
+    private SpriteRenderer spriteRenderer;
+    private Animator anim;
+    private Animator kickAnim;
+
+
+    public GameObject kickAnimationObject;
+    public GameObject attachedCamera;
+
+    [Header("Ground Check")]
+    public Transform groundCheck;
+    public float groundRadius = 0.1f;
+
+    private float gravityValue = -13f;   // custom gravity (stronger than default)
+    private bool groundedPlayer;
+    private Vector2 velocity;
+
+    private Vector2 moveInput;
+    private Vector2 mousePos;
+
+    private bool jumpPressed;
+    private float groundSpeed = 4;
+    private float airSpeed = 4;
+    private float airFriction = 25;
+
+    private Vector3 mouseWorldPos;
+
+    public GameObject sightlineEndpoint;
+    public Transform sightlineStartPos;
+    private float sightlineLength = 5;
+    private Transform targetedObject = null;
+
+    private float kickRange = 1.5f;
+    private float groundKickHeight = 2f;
+    private Collider2D[] objectsInKickRange;
+    private float kickSpeed = 10f;
+    private float kickRecoilSpeed = 8f;
+    private float kickRecoilVerticalStaling = 1f;
+
+    private bool facingLeft = false;
+
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = 0f; // we control gravity manually
+        rb.freezeRotation = true; // prevents tipping over
+
+        col = GetComponent<BoxCollider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
+        kickAnim = kickAnimationObject.GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        // Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
+        // mouseWorldPos.z = 0f;
+        // Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(mouseWorldPos.x, mouseWorldPos.y, 0f), Color.red, 0.5f);
+    }
+
+    void FixedUpdate()
+    {
+        // camera attach
+        attachedCamera.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
+
+        LayerMask layers = LayerMask.GetMask("Ground","Swappable");
+        // Ground check with OverlapCircle
+        // groundedPlayer = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
+        Vector2 boxSize = new Vector2(col.size.x * transform.lossyScale.x * 0.95f, 0.1f);
+        Vector2 boxCenter = (Vector2)transform.position 
+                            + Vector2.Scale(col.offset, transform.lossyScale) 
+                            + Vector2.down * (col.size.y * transform.lossyScale.y * 0.5f + 0.05f);
+
+        groundedPlayer = Physics2D.OverlapBox(boxCenter, boxSize, 0f, layers);
+
+        
+        if (groundedPlayer && velocity.y < 0)
+        {
+            //GROUNDED
+            kickRecoilVerticalStaling = 1f;
+
+            velocity.y = -1f; // small downward bias keeps player snapped without sinking
+
+            velocity.x = groundSpeed * moveInput.x;
+
+            if(jumpPressed)
+            {
+                velocity.y = 5f;
+            }
+        }
+        else
+        {
+            //AIRBORNE
+            velocity.y = rb.linearVelocity.y + (gravityValue * Time.fixedDeltaTime);
+            
+            
+            velocity.x = airVelocity(airSpeed * moveInput.x);
+
+
+        }
+
+        // Apply to rigidbody
+        rb.linearVelocity = new Vector2(velocity.x, velocity.y);
+
+
+        //sightline
+        mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
+        mouseWorldPos.z = 0f;
+
+        //facing
+        if(mouseWorldPos.x > transform.position.x)
+        {
+            facingLeft = false;
+        }
+        else
+        {
+            facingLeft = true;
+        }
+        spriteRenderer.flipX = facingLeft;
+
+
+        float playerToMouseVectorLength = Mathf.Sqrt(Mathf.Pow(mouseWorldPos.x-sightlineStartPos.transform.position.x, 2) + Mathf.Pow(mouseWorldPos.y-sightlineStartPos.transform.position.y, 2));
+        float sightlineLengthProportion = sightlineLength/playerToMouseVectorLength;
+
+        Vector2 sightlineEndpointVectorEnd = new Vector2(mouseWorldPos.x-sightlineStartPos.transform.position.x, mouseWorldPos.y-sightlineStartPos.transform.position.y) * sightlineLengthProportion + new Vector2(sightlineStartPos.transform.position.x, sightlineStartPos.transform.position.y);
+
+        RaycastHit2D raycast = Physics2D.Raycast(new Vector2(sightlineStartPos.position.x, sightlineStartPos.position.y), 
+                                                new Vector2(mouseWorldPos.x-sightlineStartPos.position.x, mouseWorldPos.y-sightlineStartPos.position.y), 
+                                                sightlineLength, layers);
+
+        Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(mouseWorldPos.x, mouseWorldPos.y, 0f), Color.red, Time.fixedDeltaTime);
+
+        if(raycast)
+        {
+            Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(raycast.point.x, raycast.point.y, 0f), Color.green, Time.fixedDeltaTime);
+
+            string layerName = LayerMask.LayerToName(raycast.collider.gameObject.layer);
+
+            if(layerName == "Swappable")
+            {
+                sightlineEndpoint.transform.position = raycast.transform.position;
+                targetedObject = raycast.transform;
+            }
+            else
+            {
+                sightlineEndpoint.transform.position = new Vector3(raycast.point.x, raycast.point.y, 0f);
+                targetedObject = null;
+            }
+        }
+        else
+        {
+            targetedObject = null;
+            sightlineEndpoint.transform.position = new Vector3(sightlineEndpointVectorEnd.x, sightlineEndpointVectorEnd.y, 0f);
+        }
+
+        //kick
+
+        if(groundedPlayer)
+        {
+            //GROUNDED
+            objectsInKickRange = Physics2D.OverlapAreaAll(new Vector2(groundCheck.position.x, groundCheck.position.y), 
+                                                          new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight),
+                                                          LayerMask.GetMask("Swappable"));
+
+            Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), Color.purple, Time.fixedDeltaTime);
+            Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+            Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+            Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+        
+
+            if(moveInput != Vector2.zero && (Mathf.Sign(moveInput.x) != Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+            {
+                anim.SetBool("walkingBack", true);
+                anim.SetBool("walkingFwd", false);
+            }
+            else if(moveInput != Vector2.zero && (Mathf.Sign(moveInput.x) == Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+            {
+                anim.SetBool("walkingBack", false);
+                anim.SetBool("walkingFwd", true);
+            }
+            else
+            {
+                anim.SetBool("walkingBack", false);
+                anim.SetBool("walkingFwd", false);
+            }
+        }
+        else
+        {
+            anim.SetBool("walkingBack", false);
+            anim.SetBool("walkingFwd", false);
+
+            //AIRBORNE
+            float kickRangeProportion = kickRange/(2*playerToMouseVectorLength);
+            Vector2 kickCircleCenter = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y) * kickRangeProportion + new Vector2(transform.position.x, transform.position.y);
+
+            Debug.DrawLine(kickCircleCenter - new Vector2(kickRange/2, 0), kickCircleCenter + new Vector2(kickRange/2, 0), Color.purple, Time.fixedDeltaTime);
+            Debug.DrawLine(kickCircleCenter - new Vector2(0f, kickRange/2), kickCircleCenter + new Vector2(0f, kickRange/2), Color.purple, Time.fixedDeltaTime);
+
+            objectsInKickRange = Physics2D.OverlapCircleAll(kickCircleCenter, kickRange/2, layers);
+        }
+        
+
+        
+
+        // Debug.Log("Move: " + moveInput.x + " | Jump: " + jumpPressed + " | Velocity X: " + rb.linearVelocity.x + " - Y: " + rb.linearVelocity.y + " | Grounded: " + groundedPlayer + 
+        // " | Cursor pos X: " + mousePos.x + " - Y: " + mousePos.y);
+    }
+
+    float airVelocity(float targetVelocity)
+    {
+        return Mathf.MoveTowards(rb.linearVelocity.x, targetVelocity, airFriction * Time.fixedDeltaTime);
+    }
+
+    void OnMove(InputValue value)
+    {
+        moveInput = value.Get<Vector2>();
+    }
+
+    void OnLook(InputValue value)
+    {
+        mousePos = value.Get<Vector2>();
+    }
+
+    void OnJump(InputValue value)
+    {
+        jumpPressed = value.isPressed;
+    }
+
+    void OnKick()
+    {
+        //kick direction vector
+        Vector2 direction = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y);
+        direction.Normalize();
+        
+        string layerName;
+        foreach(Collider2D collider in objectsInKickRange)
+        {
+            layerName = LayerMask.LayerToName(collider.attachedRigidbody.gameObject.layer);
+            Debug.Log(layerName + " " + direction.x + " " + direction.y);
+
+            if(layerName == "Swappable")
+            {
+                collider.attachedRigidbody.linearVelocity = direction * kickSpeed;
+            }
+            if(!groundedPlayer)
+            {
+                rb.linearVelocity = new Vector2(-direction.x * kickRecoilSpeed, -direction.y * kickRecoilSpeed * kickRecoilVerticalStaling);
+                kickRecoilVerticalStaling -= 0.25f;
+            }
+        }
+
+        if(groundedPlayer)
+        {
+            //GROUNDED
+
+            kickAnimationObject.GetComponent<SpriteRenderer>().flipX = facingLeft;
+            kickAnimationObject.transform.localPosition = new Vector3((facingLeft ? -0.1f : 0.1f), 0.1f, 0);
+            kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+
+            kickAnim.SetTrigger("Kick");
+        }
+        else
+        {
+            //AIRBORNE
+            kickAnimationObject.GetComponent<SpriteRenderer>().flipX = facingLeft;
+            kickAnimationObject.transform.localPosition = new Vector3(direction.x * 0.1f, direction.y * 0.1f, 0);
+
+            float rotation = Mathf.Atan(direction.y/direction.x) * Mathf.Rad2Deg;
+
+            kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+
+            kickAnim.SetTrigger("AirKick");
+        }
+    }
+
+    void OnSwap()
+    {
+        if(targetedObject != null)
+        {
+            Vector3 playerPos = transform.position;
+            transform.position = targetedObject.position;
+            targetedObject.position = playerPos;
+
+            targetedObject = null;
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        if (col == null) return;
+
+        // World-space size
+        Vector2 boxSize = new Vector2(col.size.x * transform.lossyScale.x * 0.95f, 0.1f);
+        Vector2 boxCenter = (Vector2)transform.position 
+                            + Vector2.Scale(col.offset, transform.lossyScale) 
+                            + Vector2.down * (col.size.y * transform.lossyScale.y * 0.5f + 0.05f);
+
+        Gizmos.color = groundedPlayer ? Color.green : Color.red;
+        Gizmos.DrawWireCube(boxCenter, boxSize);
+    }
+}
