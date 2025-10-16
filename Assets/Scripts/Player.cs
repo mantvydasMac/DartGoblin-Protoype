@@ -47,6 +47,9 @@ public class Player : MonoBehaviour
 
     private bool facingLeft = false;
 
+    [Header("Audio")]
+    private AudioSource audioSource;
+    public AudioClip kickSound;
 
     private bool paused = false;
 
@@ -57,6 +60,8 @@ public class Player : MonoBehaviour
         rb.gravityScale = 0f; // we control gravity manually
         rb.freezeRotation = true; // prevents tipping over
 
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume = 0.8f;
         col = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
@@ -257,6 +262,8 @@ public class Player : MonoBehaviour
                 }
 
                 StartCoroutine(HitstopCoroutine(collider.gameObject.GetComponent<Kickable>().hitstopDuration));
+                audioSource.pitch = Random.Range(0.95f, 1.05f);
+                audioSource.PlayOneShot(kickSound);
 
 
             }
