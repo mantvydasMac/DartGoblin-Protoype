@@ -23,17 +23,13 @@ public class Kickable : MonoBehaviour
 
     IEnumerator KickCoroutine(Vector2 vel, float duration)
     {
-        float prevGravity = rb.gravityScale;
-        rb.gravityScale = 0f;
-        rb.linearVelocity = Vector2.zero;
         float prevAngularVelocity = rb.angularVelocity;
-        rb.freezeRotation = true;
+        rb.Sleep();
 
         yield return new WaitForSeconds(duration);
 
+        rb.WakeUp();
         rb.linearVelocity = vel;
-        rb.gravityScale = prevGravity;
-        rb.freezeRotation = false;
         rb.angularVelocity = prevAngularVelocity;
     }
 
