@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
     private float kickSpeed = 10f;
     private float kickRecoilSpeed = 8f;
     private float kickRecoilVerticalStaling = 1f;
+    private float stompAngle = 15f;
 
     private bool facingLeft = false;
 
@@ -243,12 +244,18 @@ public class Player : MonoBehaviour
             if(collider.gameObject.GetComponent<Kickable>() != null)
             {
                 collider.gameObject.GetComponent<Kickable>().kick(direction * kickSpeed);
+
+                if(!groundedPlayer)
+                {
+                    float lookingRotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+                    if(lookingRotation >= -90 - stompAngle && lookingRotation <= -90 + stompAngle)
+                    {
+                        rb.linearVelocity = new Vector2(rb.linearVelocity.x, kickRecoilSpeed);
+                        // kickRecoilVerticalStaling -= 0.25f;
+                    }
+                }
             }
-            // if(!groundedPlayer)
-            // {
-            //     rb.linearVelocity = new Vector2(-direction.x * kickRecoilSpeed, -direction.y * kickRecoilSpeed * kickRecoilVerticalStaling);
-            //     kickRecoilVerticalStaling -= 0.25f;
-            // }
         }
 
 
