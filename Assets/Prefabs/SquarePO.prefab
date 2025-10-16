@@ -178,4 +178,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 785c8cf535a1b2c44bc358a8984d5d47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Kickable
-  hitstopTime: 0
+  hitstopDuration: 0.2

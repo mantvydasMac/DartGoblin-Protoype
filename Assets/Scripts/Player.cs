@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -47,6 +48,9 @@ public class Player : MonoBehaviour
     private bool facingLeft = false;
 
 
+    private bool paused = false;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -59,158 +63,154 @@ public class Player : MonoBehaviour
         kickAnim = kickAnimationObject.GetComponent<Animator>();
     }
 
-    void Update()
-    {
-        // Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
-        // mouseWorldPos.z = 0f;
-        // Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(mouseWorldPos.x, mouseWorldPos.y, 0f), Color.red, 0.5f);
-    }
-
     void FixedUpdate()
     {
-        // camera attach
-        attachedCamera.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
-
-        LayerMask layers = LayerMask.GetMask("Ground","Swappable");
-        // Ground check with OverlapCircle
-        // groundedPlayer = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
-        Vector2 boxSize = new Vector2(col.size.x * transform.lossyScale.x * 0.95f, 0.1f);
-        Vector2 boxCenter = (Vector2)transform.position 
-                            + Vector2.Scale(col.offset, transform.lossyScale) 
-                            + Vector2.down * (col.size.y * transform.lossyScale.y * 0.5f + 0.05f);
-
-        groundedPlayer = Physics2D.OverlapBox(boxCenter, boxSize, 0f, layers);
-
-        
-        if (groundedPlayer && velocity.y < 0)
+        if(!paused) 
         {
-            //GROUNDED
-            kickRecoilVerticalStaling = 1f;
+            // camera attach
+            attachedCamera.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
 
-            velocity.y = -1f; // small downward bias keeps player snapped without sinking
+            LayerMask layers = LayerMask.GetMask("Ground","Swappable");
+            // Ground check with OverlapCircle
+            // groundedPlayer = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
+            Vector2 boxSize = new Vector2(col.size.x * transform.lossyScale.x * 0.95f, 0.1f);
+            Vector2 boxCenter = (Vector2)transform.position 
+                                + Vector2.Scale(col.offset, transform.lossyScale) 
+                                + Vector2.down * (col.size.y * transform.lossyScale.y * 0.5f + 0.05f);
 
-            velocity.x = groundSpeed * moveInput.x;
+            groundedPlayer = Physics2D.OverlapBox(boxCenter, boxSize, 0f, layers);
 
-            if(jumpPressed)
-            {
-                velocity.y = 5f;
-            }
-        }
-        else
-        {
-            //AIRBORNE
-            velocity.y = rb.linearVelocity.y + (gravityValue * Time.fixedDeltaTime);
             
-            
-            velocity.x = airVelocity(airSpeed * moveInput.x);
-
-
-        }
-
-        // Apply to rigidbody
-        rb.linearVelocity = new Vector2(velocity.x, velocity.y);
-
-
-        //sightline
-        mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
-        mouseWorldPos.z = 0f;
-
-        //facing
-        if(mouseWorldPos.x > transform.position.x)
-        {
-            facingLeft = false;
-        }
-        else
-        {
-            facingLeft = true;
-        }
-        spriteRenderer.flipX = facingLeft;
-
-
-        float playerToMouseVectorLength = Mathf.Sqrt(Mathf.Pow(mouseWorldPos.x-sightlineStartPos.transform.position.x, 2) + Mathf.Pow(mouseWorldPos.y-sightlineStartPos.transform.position.y, 2));
-        float sightlineLengthProportion = sightlineLength/playerToMouseVectorLength;
-
-        Vector2 sightlineEndpointVectorEnd = new Vector2(mouseWorldPos.x-sightlineStartPos.transform.position.x, mouseWorldPos.y-sightlineStartPos.transform.position.y) * sightlineLengthProportion + new Vector2(sightlineStartPos.transform.position.x, sightlineStartPos.transform.position.y);
-
-        RaycastHit2D raycast = Physics2D.Raycast(new Vector2(sightlineStartPos.position.x, sightlineStartPos.position.y), 
-                                                new Vector2(mouseWorldPos.x-sightlineStartPos.position.x, mouseWorldPos.y-sightlineStartPos.position.y), 
-                                                sightlineLength, layers);
-
-        Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(mouseWorldPos.x, mouseWorldPos.y, 0f), Color.red, Time.fixedDeltaTime);
-
-        if(raycast)
-        {
-            Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(raycast.point.x, raycast.point.y, 0f), Color.green, Time.fixedDeltaTime);
-
-            string layerName = LayerMask.LayerToName(raycast.collider.gameObject.layer);
-
-            if(layerName == "Swappable")
+            if (groundedPlayer && velocity.y < 0)
             {
-                sightlineEndpoint.transform.position = raycast.transform.position;
-                targetedObject = raycast.transform;
+                //GROUNDED
+                kickRecoilVerticalStaling = 1f;
+
+                velocity.y = -1f; // small downward bias keeps player snapped without sinking
+
+                velocity.x = groundSpeed * moveInput.x;
+
+                if(jumpPressed)
+                {
+                    velocity.y = 5f;
+                }
             }
             else
             {
-                sightlineEndpoint.transform.position = new Vector3(raycast.point.x, raycast.point.y, 0f);
+                //AIRBORNE
+                velocity.y = rb.linearVelocity.y + (gravityValue * Time.fixedDeltaTime);
+                
+                
+                velocity.x = airVelocity(airSpeed * moveInput.x);
+
+
+            }
+
+            // Apply to rigidbody
+            rb.linearVelocity = new Vector2(velocity.x, velocity.y);
+
+
+            //sightline
+            mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
+            mouseWorldPos.z = 0f;
+
+            //facing
+            if(mouseWorldPos.x > transform.position.x)
+            {
+                facingLeft = false;
+            }
+            else
+            {
+                facingLeft = true;
+            }
+            spriteRenderer.flipX = facingLeft;
+
+
+            float playerToMouseVectorLength = Mathf.Sqrt(Mathf.Pow(mouseWorldPos.x-sightlineStartPos.transform.position.x, 2) + Mathf.Pow(mouseWorldPos.y-sightlineStartPos.transform.position.y, 2));
+            float sightlineLengthProportion = sightlineLength/playerToMouseVectorLength;
+
+            Vector2 sightlineEndpointVectorEnd = new Vector2(mouseWorldPos.x-sightlineStartPos.transform.position.x, mouseWorldPos.y-sightlineStartPos.transform.position.y) * sightlineLengthProportion + new Vector2(sightlineStartPos.transform.position.x, sightlineStartPos.transform.position.y);
+
+            RaycastHit2D raycast = Physics2D.Raycast(new Vector2(sightlineStartPos.position.x, sightlineStartPos.position.y), 
+                                                    new Vector2(mouseWorldPos.x-sightlineStartPos.position.x, mouseWorldPos.y-sightlineStartPos.position.y), 
+                                                    sightlineLength, layers);
+
+            Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(mouseWorldPos.x, mouseWorldPos.y, 0f), Color.red, Time.fixedDeltaTime);
+
+            if(raycast)
+            {
+                Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(raycast.point.x, raycast.point.y, 0f), Color.green, Time.fixedDeltaTime);
+
+                string layerName = LayerMask.LayerToName(raycast.collider.gameObject.layer);
+
+                if(layerName == "Swappable")
+                {
+                    sightlineEndpoint.transform.position = raycast.transform.position;
+                    targetedObject = raycast.transform;
+                }
+                else
+                {
+                    sightlineEndpoint.transform.position = new Vector3(raycast.point.x, raycast.point.y, 0f);
+                    targetedObject = null;
+                }
+            }
+            else
+            {
                 targetedObject = null;
+                sightlineEndpoint.transform.position = new Vector3(sightlineEndpointVectorEnd.x, sightlineEndpointVectorEnd.y, 0f);
             }
-        }
-        else
-        {
-            targetedObject = null;
-            sightlineEndpoint.transform.position = new Vector3(sightlineEndpointVectorEnd.x, sightlineEndpointVectorEnd.y, 0f);
-        }
 
-        //kick
+            //kick
 
-        if(groundedPlayer)
-        {
-            //GROUNDED
-            objectsInKickRange = Physics2D.OverlapAreaAll(new Vector2(groundCheck.position.x, groundCheck.position.y), 
-                                                          new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight));
-
-            Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), Color.purple, Time.fixedDeltaTime);
-            Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
-            Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
-            Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
-        
-
-            if(moveInput != Vector2.zero && (Mathf.Sign(moveInput.x) != Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+            if(groundedPlayer)
             {
-                anim.SetBool("walkingBack", true);
-                anim.SetBool("walkingFwd", false);
-            }
-            else if(moveInput != Vector2.zero && (Mathf.Sign(moveInput.x) == Mathf.Sign(mouseWorldPos.x-transform.position.x)))
-            {
-                anim.SetBool("walkingBack", false);
-                anim.SetBool("walkingFwd", true);
+                //GROUNDED
+                objectsInKickRange = Physics2D.OverlapAreaAll(new Vector2(groundCheck.position.x, groundCheck.position.y), 
+                                                            new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight));
+
+                Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), Color.purple, Time.fixedDeltaTime);
+                Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+                Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+                Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+            
+
+                if(moveInput != Vector2.zero && (Mathf.Sign(moveInput.x) != Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+                {
+                    anim.SetBool("walkingBack", true);
+                    anim.SetBool("walkingFwd", false);
+                }
+                else if(moveInput != Vector2.zero && (Mathf.Sign(moveInput.x) == Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+                {
+                    anim.SetBool("walkingBack", false);
+                    anim.SetBool("walkingFwd", true);
+                }
+                else
+                {
+                    anim.SetBool("walkingBack", false);
+                    anim.SetBool("walkingFwd", false);
+                }
             }
             else
             {
                 anim.SetBool("walkingBack", false);
                 anim.SetBool("walkingFwd", false);
+
+                //AIRBORNE
+                float kickRangeProportion = kickRange/(2*playerToMouseVectorLength);
+                Vector2 kickCircleCenter = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y) * kickRangeProportion + new Vector2(transform.position.x, transform.position.y);
+
+                Debug.DrawLine(kickCircleCenter - new Vector2(kickRange/2, 0), kickCircleCenter + new Vector2(kickRange/2, 0), Color.purple, Time.fixedDeltaTime);
+                Debug.DrawLine(kickCircleCenter - new Vector2(0f, kickRange/2), kickCircleCenter + new Vector2(0f, kickRange/2), Color.purple, Time.fixedDeltaTime);
+
+                objectsInKickRange = Physics2D.OverlapCircleAll(kickCircleCenter, kickRange/2);
             }
+            
+
+            
+
+            // Debug.Log("Move: " + moveInput.x + " | Jump: " + jumpPressed + " | Velocity X: " + rb.linearVelocity.x + " - Y: " + rb.linearVelocity.y + " | Grounded: " + groundedPlayer + 
+            // " | Cursor pos X: " + mousePos.x + " - Y: " + mousePos.y);
         }
-        else
-        {
-            anim.SetBool("walkingBack", false);
-            anim.SetBool("walkingFwd", false);
-
-            //AIRBORNE
-            float kickRangeProportion = kickRange/(2*playerToMouseVectorLength);
-            Vector2 kickCircleCenter = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y) * kickRangeProportion + new Vector2(transform.position.x, transform.position.y);
-
-            Debug.DrawLine(kickCircleCenter - new Vector2(kickRange/2, 0), kickCircleCenter + new Vector2(kickRange/2, 0), Color.purple, Time.fixedDeltaTime);
-            Debug.DrawLine(kickCircleCenter - new Vector2(0f, kickRange/2), kickCircleCenter + new Vector2(0f, kickRange/2), Color.purple, Time.fixedDeltaTime);
-
-            objectsInKickRange = Physics2D.OverlapCircleAll(kickCircleCenter, kickRange/2);
-        }
-        
-
-        
-
-        // Debug.Log("Move: " + moveInput.x + " | Jump: " + jumpPressed + " | Velocity X: " + rb.linearVelocity.x + " - Y: " + rb.linearVelocity.y + " | Grounded: " + groundedPlayer + 
-        // " | Cursor pos X: " + mousePos.x + " - Y: " + mousePos.y);
     }
 
     float airVelocity(float targetVelocity)
@@ -255,6 +255,10 @@ public class Player : MonoBehaviour
                         // kickRecoilVerticalStaling -= 0.25f;
                     }
                 }
+
+                StartCoroutine(HitstopCoroutine(collider.gameObject.GetComponent<Kickable>().hitstopDuration));
+
+
             }
         }
 
@@ -294,6 +298,24 @@ public class Player : MonoBehaviour
 
             targetedObject = null;
         }
+    }
+
+    IEnumerator HitstopCoroutine(float duration)
+    {
+        paused = true;
+        Vector2 prevVelocity = rb.linearVelocity;
+        rb.linearVelocity = Vector2.zero;
+        anim.speed = 0f;
+        kickAnim.speed = 0.5f;
+        
+
+        yield return new WaitForSeconds(duration);
+
+
+        rb.linearVelocity = prevVelocity;
+        anim.speed = 1f;
+        kickAnim.speed = 1f;
+        paused = false;
     }
 
     void OnDrawGizmos()
