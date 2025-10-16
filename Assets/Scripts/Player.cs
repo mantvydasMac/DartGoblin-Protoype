@@ -166,8 +166,7 @@ public class Player : MonoBehaviour
         {
             //GROUNDED
             objectsInKickRange = Physics2D.OverlapAreaAll(new Vector2(groundCheck.position.x, groundCheck.position.y), 
-                                                          new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight),
-                                                          LayerMask.GetMask("Swappable"));
+                                                          new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight));
 
             Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), Color.purple, Time.fixedDeltaTime);
             Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
@@ -203,7 +202,7 @@ public class Player : MonoBehaviour
             Debug.DrawLine(kickCircleCenter - new Vector2(kickRange/2, 0), kickCircleCenter + new Vector2(kickRange/2, 0), Color.purple, Time.fixedDeltaTime);
             Debug.DrawLine(kickCircleCenter - new Vector2(0f, kickRange/2), kickCircleCenter + new Vector2(0f, kickRange/2), Color.purple, Time.fixedDeltaTime);
 
-            objectsInKickRange = Physics2D.OverlapCircleAll(kickCircleCenter, kickRange/2, layers);
+            objectsInKickRange = Physics2D.OverlapCircleAll(kickCircleCenter, kickRange/2);
         }
         
 
@@ -239,23 +238,21 @@ public class Player : MonoBehaviour
         Vector2 direction = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y);
         direction.Normalize();
         
-        string layerName;
         foreach(Collider2D collider in objectsInKickRange)
         {
-            layerName = LayerMask.LayerToName(collider.attachedRigidbody.gameObject.layer);
-            Debug.Log(layerName + " " + direction.x + " " + direction.y);
-
-            if(layerName == "Swappable")
+            if(collider.gameObject.GetComponent<Kickable>() != null)
             {
-                collider.attachedRigidbody.linearVelocity = direction * kickSpeed;
+                collider.gameObject.GetComponent<Kickable>().kick(direction * kickSpeed);
             }
-            if(!groundedPlayer)
-            {
-                rb.linearVelocity = new Vector2(-direction.x * kickRecoilSpeed, -direction.y * kickRecoilSpeed * kickRecoilVerticalStaling);
-                kickRecoilVerticalStaling -= 0.25f;
-            }
+            // if(!groundedPlayer)
+            // {
+            //     rb.linearVelocity = new Vector2(-direction.x * kickRecoilSpeed, -direction.y * kickRecoilSpeed * kickRecoilVerticalStaling);
+            //     kickRecoilVerticalStaling -= 0.25f;
+            // }
         }
 
+
+        // ANIMATION
         if(groundedPlayer)
         {
             //GROUNDED
