@@ -42,8 +42,11 @@ public class Player : MonoBehaviour
     private Collider2D[] objectsInKickRange;
     private float kickSpeed = 10f;
     private float kickRecoilSpeed = 8f;
-    private float kickRecoilVerticalStaling = 1f;
     private float stompAngle = 15f;
+
+    private float swapJumpVelocity = 5;
+    private int swapJumpLimit = 2;
+    private int swapJumpLeft;
 
     private bool facingLeft = false;
 
@@ -66,6 +69,8 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         kickAnim = kickAnimationObject.GetComponent<Animator>();
+
+        swapJumpLeft = swapJumpLimit;
     }
 
     void FixedUpdate()
@@ -89,7 +94,7 @@ public class Player : MonoBehaviour
             if (groundedPlayer && velocity.y < 0)
             {
                 //GROUNDED
-                kickRecoilVerticalStaling = 1f;
+                swapJumpLeft = swapJumpLimit;
 
                 velocity.y = -1f; // small downward bias keeps player snapped without sinking
 
@@ -177,12 +182,12 @@ public class Player : MonoBehaviour
                 Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
             
 
-                if(moveInput != Vector2.zero && (Mathf.Sign(moveInput.x) != Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+                if(moveInput.x != 0 && (Mathf.Sign(moveInput.x) != Mathf.Sign(mouseWorldPos.x-transform.position.x)))
                 {
                     anim.SetBool("walkingBack", true);
                     anim.SetBool("walkingFwd", false);
                 }
-                else if(moveInput != Vector2.zero && (Mathf.Sign(moveInput.x) == Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+                else if(moveInput.x != 0 && (Mathf.Sign(moveInput.x) == Mathf.Sign(mouseWorldPos.x-transform.position.x)))
                 {
                     anim.SetBool("walkingBack", false);
                     anim.SetBool("walkingFwd", true);
@@ -307,9 +312,13 @@ public class Player : MonoBehaviour
             Vector3 playerTargetPos = targetedObject.position;
             targetedObject.gameObject.GetComponent<Swappable>().swap(transform.position);
             transform.position = playerTargetPos;
-            
-            
             targetedObject = null;
+
+            if(moveInput.y > 0 && swapJumpLeft > 0)
+            {
+                rb.linearVelocity = new Vector2(0f, swapJumpVelocity);
+                swapJumpLeft--;
+            }
         }
     }
 
