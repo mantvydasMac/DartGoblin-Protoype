@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
             // camera attach
             attachedCamera.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
 
-            LayerMask layers = LayerMask.GetMask("Ground","Swappable");
+            LayerMask layers = LayerMask.GetMask("Ground","Object");
             // Ground check with OverlapCircle
             // groundedPlayer = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
             Vector2 boxSize = new Vector2(col.size.x * transform.lossyScale.x * 0.95f, 0.1f);
@@ -146,11 +146,9 @@ public class Player : MonoBehaviour
             {
                 Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(raycast.point.x, raycast.point.y, 0f), Color.green, Time.fixedDeltaTime);
 
-                string layerName = LayerMask.LayerToName(raycast.collider.gameObject.layer);
-
-                if(layerName == "Swappable")
+                if(raycast.collider.gameObject.GetComponent<Swappable>() != null)
                 {
-                    sightlineEndpoint.transform.position = raycast.transform.position;
+                    sightlineEndpoint.transform.position = new Vector3(raycast.transform.position.x, raycast.transform.position.y, -5); //raycast.transform.position;
                     targetedObject = raycast.transform;
                 }
                 else
@@ -243,6 +241,7 @@ public class Player : MonoBehaviour
         //kick direction vector
         Vector2 direction = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y);
         direction.Normalize();
+        float lookingRotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         
         foreach(Collider2D collider in objectsInKickRange)
         {
@@ -252,8 +251,6 @@ public class Player : MonoBehaviour
 
                 if(!groundedPlayer)
                 {
-                    float lookingRotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
                     if(lookingRotation >= -90 - stompAngle && lookingRotation <= -90 + stompAngle)
                     {
                         rb.linearVelocity = new Vector2(rb.linearVelocity.x, kickRecoilSpeed);
@@ -261,9 +258,9 @@ public class Player : MonoBehaviour
                     }
                 }
 
-                StartCoroutine(HitstopCoroutine(collider.gameObject.GetComponent<Kickable>().hitstopDuration));
                 audioSource.pitch = Random.Range(0.95f, 1.05f);
                 audioSource.PlayOneShot(kickSound);
+                StartCoroutine(HitstopCoroutine(collider.gameObject.GetComponent<Kickable>().hitstopDuration));
 
 
             }
@@ -285,13 +282,21 @@ public class Player : MonoBehaviour
         {
             //AIRBORNE
             kickAnimationObject.GetComponent<SpriteRenderer>().flipX = facingLeft;
-            kickAnimationObject.transform.localPosition = new Vector3(direction.x * 0.1f, direction.y * 0.1f, 0);
 
-            float rotation = Mathf.Atan(direction.y/direction.x) * Mathf.Rad2Deg;
-
-            kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, rotation);
-
-            kickAnim.SetTrigger("AirKick");
+            if(lookingRotation >= -90 - stompAngle && lookingRotation <= -90 + stompAngle)
+            {
+                kickAnimationObject.transform.localPosition = new Vector3(0, -0.2f, 0);
+                kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                kickAnim.SetTrigger("Stomp");
+            }
+            else 
+            {
+                kickAnimationObject.transform.localPosition = new Vector3(direction.x * 0.1f, direction.y * 0.1f, 0);
+                float rotation = Mathf.Atan(direction.y/direction.x) * Mathf.Rad2Deg;
+                kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+                kickAnim.SetTrigger("AirKick");
+            }
+            
         }
     }
 
@@ -299,10 +304,11 @@ public class Player : MonoBehaviour
     {
         if(targetedObject != null)
         {
-            Vector3 playerPos = transform.position;
-            transform.position = targetedObject.position;
-            targetedObject.position = playerPos;
-
+            Vector3 playerTargetPos = targetedObject.position;
+            targetedObject.gameObject.GetComponent<Swappable>().swap(transform.position);
+            transform.position = playerTargetPos;
+            
+            
             targetedObject = null;
         }
     }
