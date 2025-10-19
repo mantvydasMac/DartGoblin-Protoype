@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
 
     public GameObject kickAnimationObject;
     public GameObject attachedCamera;
+    public ParticleSystem tpParticles;
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -314,11 +315,12 @@ public class Player : MonoBehaviour
             transform.position = playerTargetPos;
             targetedObject = null;
 
-            if(moveInput.y > 0 && swapJumpLeft > 0)
+            if (moveInput.y > 0 && swapJumpLeft > 0)
             {
                 rb.linearVelocity = new Vector2(0f, swapJumpVelocity);
                 swapJumpLeft--;
             }
+            SpawnTpParticles();
         }
     }
 
@@ -346,11 +348,16 @@ public class Player : MonoBehaviour
 
         // World-space size
         Vector2 boxSize = new Vector2(col.size.x * transform.lossyScale.x * 0.95f, 0.1f);
-        Vector2 boxCenter = (Vector2)transform.position 
-                            + Vector2.Scale(col.offset, transform.lossyScale) 
+        Vector2 boxCenter = (Vector2)transform.position
+                            + Vector2.Scale(col.offset, transform.lossyScale)
                             + Vector2.down * (col.size.y * transform.lossyScale.y * 0.5f + 0.05f);
 
         Gizmos.color = groundedPlayer ? Color.green : Color.red;
         Gizmos.DrawWireCube(boxCenter, boxSize);
+    }
+    
+    private void SpawnTpParticles()
+    {
+        Instantiate(tpParticles, transform.position, Quaternion.identity).Play();
     }
 }
