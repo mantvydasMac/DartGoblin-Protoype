@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2654675968498202236}
   - component: {fileID: -8975287779571302486}
   - component: {fileID: 3243330056452756989}
+  - component: {fileID: -1848856004487941431}
   m_Layer: 8
   m_Name: NoGravityBallPO
   m_TagString: Untagged
@@ -280,3 +281,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-1848856004487941431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7222354766680598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57edacf0c82d1ab4292c3aceac970c33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Swappable
