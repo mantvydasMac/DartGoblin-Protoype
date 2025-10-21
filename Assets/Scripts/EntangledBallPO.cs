@@ -5,13 +5,16 @@ public class EntangledBallPO : MonoBehaviour
 {
     Rigidbody2D rb;
     AudioSource audioSource;
-    Collider2D coll;
+    CircleCollider2D coll;
     
     private float airFriction = 8;
     private float teleportDelay = 2;
 
+    private float teleportLaunchSpeed = 5;
+
     private Vector3 originalPosition;
     private Vector3 originalScale;
+    private float radius;
     private bool teleporting = false;
 
     private enum Mode {
@@ -31,6 +34,7 @@ public class EntangledBallPO : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         rb.gravityScale = 0f;
         coll = GetComponent<CircleCollider2D>();
+        radius = coll.radius * transform.lossyScale.x;
 
         originalPosition = transform.position;
         originalScale = transform.localScale;
@@ -51,12 +55,12 @@ public class EntangledBallPO : MonoBehaviour
         {
             if(mode == Mode.SHRINKING)
             {
-                scale = Vector3.MoveTowards(transform.localScale, Vector3.zero, 3*Time.fixedDeltaTime);
+                scale = Vector3.MoveTowards(transform.localScale, Vector3.zero, 8*Time.fixedDeltaTime);
                 transform.localScale = scale;
             }
             else if(mode == Mode.EXPANDING)
             {
-                scale = Vector3.MoveTowards(transform.localScale, originalScale, 3*Time.fixedDeltaTime);
+                scale = Vector3.MoveTowards(transform.localScale, originalScale, 8*Time.fixedDeltaTime);
                 transform.localScale = scale;
             }
         }
@@ -81,6 +85,14 @@ public class EntangledBallPO : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         transform.position = originalPosition;
 
+        Collider2D[] objectsInKickRange = Physics2D.OverlapCircleAll(transform.position, radius, ~ (1 << LayerMask.NameToLayer("Ground")));
+
+        foreach(Collider2D obj in objectsInKickRange) 
+        {
+            Vector2 direction = (new Vector2(obj.gameObject.transform.position.x - transform.position.x, obj.gameObject.transform.position.y - transform.position.y)).normalized;
+
+            obj.attachedRigidbody.linearVelocity = direction * teleportLaunchSpeed;
+        }
 
         mode = Mode.EXPANDING;
         Debug.Log("expanding");
