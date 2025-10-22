@@ -103,20 +103,18 @@ public class Player : MonoBehaviour
 
                 velocity.x = groundSpeed * moveInput.x;
 
-                if(jumpPressed)
+                if (jumpPressed)
                 {
                     velocity.y = 5f;
                 }
+                anim.SetBool("jump", false);
             }
             else
             {
                 //AIRBORNE
                 velocity.y = rb.linearVelocity.y + (gravityValue * Time.fixedDeltaTime);
-                
-                
                 velocity.x = airVelocity(airSpeed * moveInput.x);
-
-
+                anim.SetBool("jump", true);
             }
 
             // Apply to rigidbody
