@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface PhysicsObject
+public interface Resetable
 {
     public Vector3 originalPosition { get; set;}
 

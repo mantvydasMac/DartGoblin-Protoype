@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class NoGravityBallPO : MonoBehaviour, PhysicsObject
+public class NoGravityBallPO : MonoBehaviour, Resetable
 {
     public Vector3 originalPosition {get; set; }
 

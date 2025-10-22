@@ -52,7 +52,7 @@ public class Room : MonoBehaviour
 
         for(int i = 0;i<roomObjects.Length;++i)
         {
-            roomObjects[i].GetComponent<PhysicsObject>().Reset();
+            roomObjects[i].GetComponent<Resetable>().Reset();
         }
     }
 
