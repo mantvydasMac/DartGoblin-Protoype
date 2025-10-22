@@ -634,7 +634,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.25
+      scalar: 0.15
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -687,7 +687,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 3
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -805,7 +805,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.05
+      scalar: 0.15
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -1190,7 +1190,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 1, y: 1, z: 1}
+    m_Scale: {x: 1, y: 1, z: 0}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -5300,7 +5300,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 73d96e8760fdf60428a4aca4f5308753, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
