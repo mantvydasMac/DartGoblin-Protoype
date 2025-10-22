@@ -48,6 +48,7 @@ public class Room : MonoBehaviour
         if(player != null)
         {
             player.transform.position = playerRespawn.position;
+            player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
         }
 
         for(int i = 0;i<roomObjects.Length;++i)
