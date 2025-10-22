@@ -260,6 +260,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""727e01b1-2d4a-4b44-b278-a8770ed30f00"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Kick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""7b3bd033-e95e-421e-adf9-61ebb326d497"",
                     ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
