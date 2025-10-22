@@ -1,8 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class EntangledBallPO : MonoBehaviour
+public class EntangledBallPO  : MonoBehaviour, Resetable
 {
+    public Vector3 originalPosition { get; set; }
+
+
     Rigidbody2D rb;
     AudioSource audioSource;
     CircleCollider2D coll;
@@ -11,8 +14,8 @@ public class EntangledBallPO : MonoBehaviour
     private float teleportDelay = 2;
 
     private float teleportLaunchSpeed = 5;
+    private int teleportLaunchExcludeLayerMask;
 
-    private Vector3 originalPosition;
     private Vector3 originalScale;
     private float radius;
     private bool teleporting = false;
@@ -35,6 +38,9 @@ public class EntangledBallPO : MonoBehaviour
         rb.gravityScale = 0f;
         coll = GetComponent<CircleCollider2D>();
         radius = coll.radius * transform.lossyScale.x;
+
+        int exclude = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("RoomBoundary"));
+        teleportLaunchExcludeLayerMask = ~exclude;
 
         originalPosition = transform.position;
         originalScale = transform.localScale;
@@ -78,14 +84,13 @@ public class EntangledBallPO : MonoBehaviour
 
         mode = Mode.SHRINKING;
 
-        Debug.Log("shrinking");
         yield return new WaitUntil(() => transform.localScale.magnitude <= 0.01f);
         transform.localScale = Vector3.zero;
 
         rb.linearVelocity = Vector2.zero;
         transform.position = originalPosition;
 
-        Collider2D[] objectsInKickRange = Physics2D.OverlapCircleAll(transform.position, radius, ~ (1 << LayerMask.NameToLayer("Ground")));
+        Collider2D[] objectsInKickRange = Physics2D.OverlapCircleAll(transform.position, radius, teleportLaunchExcludeLayerMask);
 
         foreach(Collider2D obj in objectsInKickRange) 
         {
@@ -95,12 +100,23 @@ public class EntangledBallPO : MonoBehaviour
         }
 
         mode = Mode.EXPANDING;
-        Debug.Log("expanding");
         yield return new WaitUntil(() => (transform.localScale - originalScale).magnitude <= 0.01f);
         transform.localScale = originalScale;
 
-
+        mode = Mode.NONE;
         coll.enabled = true;
         teleporting = false;
+    }
+
+    public void Reset()
+    {
+        StopAllCoroutines();
+        transform.position = originalPosition;
+        transform.localScale = originalScale;
+        rb.linearVelocity = Vector2.zero;
+        mode = Mode.NONE;
+        coll.enabled = true;
+        teleporting = false;
+
     }
 }
