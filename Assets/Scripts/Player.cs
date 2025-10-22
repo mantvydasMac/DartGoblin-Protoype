@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -38,12 +39,7 @@ public class Player : MonoBehaviour
     private float sightlineLength = 5;
     private Transform targetedObject = null;
 
-    private float kickRange = 1.5f;
-    private float groundKickHeight = 2f;
-    private Collider2D[] objectsInKickRange;
-    private float kickSpeed = 10f;
-    private float kickRecoilSpeed = 8f;
-    private float stompAngle = 15f;
+    
 
     private float swapJumpVelocity = 5;
     private int swapJumpLimit = 2;
@@ -54,6 +50,26 @@ public class Player : MonoBehaviour
     [Header("Audio")]
     private AudioSource audioSource;
     public AudioClip kickSound;
+
+    private float kickRange = 1.5f;
+    private float groundKickHeight = 2f;
+    private Collider2D[] objectsInKickRange;
+    private float kickSpeed = 10f;
+    private float kickRecoilSpeed = 8f;
+    private float stompAngle = 15f;
+
+    private float groundKickStartupTime = 0.02f;
+    private float groundKickActiveTime = 0.02f;
+    private float airKickStartupTime = 0.02f;
+    private float airKickActiveTime = 0.12f;
+    private int kickingStage = 0;
+    private float kickTimeSum = 0f;
+    private bool groundedKick = true;
+    private HashSet<Collider2D> prevKickedCols = new HashSet<Collider2D>();
+    private float kickLookingDirection;
+    private Vector3 kickMousePos;
+    
+    private bool jumpAllowed = true; 
 
     private bool paused = false;
 
@@ -103,7 +119,7 @@ public class Player : MonoBehaviour
 
                 velocity.x = groundSpeed * moveInput.x;
 
-                if(jumpPressed)
+                if(jumpAllowed && jumpPressed)
                 {
                     velocity.y = 5f;
                 }
@@ -137,6 +153,31 @@ public class Player : MonoBehaviour
                 facingLeft = true;
             }
             spriteRenderer.flipX = facingLeft;
+
+            // walking animation
+            if(groundedPlayer)
+            {
+                if(moveInput.x != 0 && (Mathf.Sign(moveInput.x) != Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+                {
+                    anim.SetBool("walkingBack", true);
+                    anim.SetBool("walkingFwd", false);
+                }
+                else if(moveInput.x != 0 && (Mathf.Sign(moveInput.x) == Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+                {
+                    anim.SetBool("walkingBack", false);
+                    anim.SetBool("walkingFwd", true);
+                }
+                else
+                {
+                    anim.SetBool("walkingBack", false);
+                    anim.SetBool("walkingFwd", false);
+                }
+            }
+            else
+            {
+                anim.SetBool("walkingBack", false);
+                anim.SetBool("walkingFwd", false);
+            }
 
 
             float playerToMouseVectorLength = Mathf.Sqrt(Mathf.Pow(mouseWorldPos.x-sightlineStartPos.transform.position.x, 2) + Mathf.Pow(mouseWorldPos.y-sightlineStartPos.transform.position.y, 2));
@@ -173,55 +214,86 @@ public class Player : MonoBehaviour
             }
 
             //kick
+            if(kickingStage == 1)
+            {// Startup
+                kickTimeSum += Time.fixedDeltaTime;
 
-            if(groundedPlayer)
-            {
-                //GROUNDED
-                objectsInKickRange = Physics2D.OverlapAreaAll(new Vector2(groundCheck.position.x, groundCheck.position.y), 
-                                                            new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight));
-
-                Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), Color.purple, Time.fixedDeltaTime);
-                Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
-                Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
-                Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
-            
-
-                if(moveInput.x != 0 && (Mathf.Sign(moveInput.x) != Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+                if((groundedKick && kickTimeSum >= groundKickStartupTime) || (!groundedKick && kickTimeSum >= airKickStartupTime))
                 {
-                    anim.SetBool("walkingBack", true);
-                    anim.SetBool("walkingFwd", false);
+                    kickTimeSum = 0f;
+                    kickingStage = 2;
                 }
-                else if(moveInput.x != 0 && (Mathf.Sign(moveInput.x) == Mathf.Sign(mouseWorldPos.x-transform.position.x)))
+            }
+            else if(kickingStage == 2)
+            {// Active
+                kickTimeSum += Time.fixedDeltaTime;
+
+
+                if(groundedKick)
                 {
-                    anim.SetBool("walkingBack", false);
-                    anim.SetBool("walkingFwd", true);
+                    objectsInKickRange = Physics2D.OverlapAreaAll(new Vector2(groundCheck.position.x, groundCheck.position.y), 
+                                                        new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight));
+
+                    Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), Color.purple, Time.fixedDeltaTime);
+                    Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+                    Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+                    Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+                    
+                    if(kickTimeSum >= groundKickActiveTime)
+                    {
+                        kickingStage = 0;
+                    }
                 }
                 else
                 {
-                    anim.SetBool("walkingBack", false);
-                    anim.SetBool("walkingFwd", false);
+                    float kickRangeProportion = kickRange/(2*playerToMouseVectorLength);
+                    Vector2 kickCircleCenter = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y) * kickRangeProportion + new Vector2(transform.position.x, transform.position.y);
+
+                    Debug.DrawLine(kickCircleCenter - new Vector2(kickRange/2, 0), kickCircleCenter + new Vector2(kickRange/2, 0), Color.purple, Time.fixedDeltaTime);
+                    Debug.DrawLine(kickCircleCenter - new Vector2(0f, kickRange/2), kickCircleCenter + new Vector2(0f, kickRange/2), Color.purple, Time.fixedDeltaTime);
+
+                    objectsInKickRange = Physics2D.OverlapCircleAll(kickCircleCenter, kickRange/2);
+
+                    if(kickTimeSum >= airKickActiveTime)
+                    {
+                        kickingStage = 0;
+                    }
+                }
+                
+                foreach(Collider2D collider in objectsInKickRange)
+                {
+                    if(collider.gameObject.GetComponent<Kickable>() != null && !prevKickedCols.Contains(collider))
+                    {
+                        Vector2 kickDirection;
+                        
+                        if(groundedKick)
+                        {
+                            kickDirection = new Vector2(kickMousePos.x - collider.gameObject.transform.position.x, kickMousePos.y - collider.gameObject.transform.position.y);
+                        }
+                        else 
+                        {
+                            kickDirection = new Vector2(kickMousePos.x - transform.position.x, kickMousePos.y - transform.position.y);
+                        }
+
+                        collider.gameObject.GetComponent<Kickable>().kick(kickDirection.normalized * kickSpeed);
+
+                        if(!groundedPlayer)
+                        {
+                            if(kickLookingDirection >= -90 - stompAngle && kickLookingDirection <= -90 + stompAngle)
+                            {
+                                rb.linearVelocity = new Vector2(rb.linearVelocity.x, kickRecoilSpeed);
+                                // kickRecoilVerticalStaling -= 0.25f;
+                            }
+                        }
+
+                        audioSource.pitch = Random.Range(0.95f, 1.05f);
+                        audioSource.PlayOneShot(kickSound);
+                        StartCoroutine(HitstopCoroutine(collider.gameObject.GetComponent<Kickable>().hitstopDuration));
+
+                        prevKickedCols.Add(collider);
+                    }
                 }
             }
-            else
-            {
-                anim.SetBool("walkingBack", false);
-                anim.SetBool("walkingFwd", false);
-
-                //AIRBORNE
-                float kickRangeProportion = kickRange/(2*playerToMouseVectorLength);
-                Vector2 kickCircleCenter = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y) * kickRangeProportion + new Vector2(transform.position.x, transform.position.y);
-
-                Debug.DrawLine(kickCircleCenter - new Vector2(kickRange/2, 0), kickCircleCenter + new Vector2(kickRange/2, 0), Color.purple, Time.fixedDeltaTime);
-                Debug.DrawLine(kickCircleCenter - new Vector2(0f, kickRange/2), kickCircleCenter + new Vector2(0f, kickRange/2), Color.purple, Time.fixedDeltaTime);
-
-                objectsInKickRange = Physics2D.OverlapCircleAll(kickCircleCenter, kickRange/2);
-            }
-            
-
-            
-
-            // Debug.Log("Move: " + moveInput.x + " | Jump: " + jumpPressed + " | Velocity X: " + rb.linearVelocity.x + " - Y: " + rb.linearVelocity.y + " | Grounded: " + groundedPlayer + 
-            // " | Cursor pos X: " + mousePos.x + " - Y: " + mousePos.y);
         }
     }
 
@@ -247,65 +319,53 @@ public class Player : MonoBehaviour
 
     void OnKick()
     {
-        //kick direction vector
-        Vector2 direction = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y);
-        direction.Normalize();
-        float lookingRotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        
-        foreach(Collider2D collider in objectsInKickRange)
+        if(kickingStage == 0)
         {
-            if(collider.gameObject.GetComponent<Kickable>() != null)
+            kickingStage = 1;
+            kickTimeSum = 0f;
+            prevKickedCols.Clear();
+            kickMousePos = mouseWorldPos;
+            groundedKick = groundedPlayer;
+
+
+            //kick direction vector
+            Vector2 direction = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y);
+            direction.Normalize();
+            kickLookingDirection = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+
+            // ANIMATION
+
+            if(groundedPlayer)
             {
-                collider.gameObject.GetComponent<Kickable>().kick(direction * kickSpeed);
+                //GROUNDED
 
-                if(!groundedPlayer)
-                {
-                    if(lookingRotation >= -90 - stompAngle && lookingRotation <= -90 + stompAngle)
-                    {
-                        rb.linearVelocity = new Vector2(rb.linearVelocity.x, kickRecoilSpeed);
-                        // kickRecoilVerticalStaling -= 0.25f;
-                    }
-                }
-
-                audioSource.pitch = Random.Range(0.95f, 1.05f);
-                audioSource.PlayOneShot(kickSound);
-                StartCoroutine(HitstopCoroutine(collider.gameObject.GetComponent<Kickable>().hitstopDuration));
-
-
-            }
-        }
-
-
-        // ANIMATION
-        if(groundedPlayer)
-        {
-            //GROUNDED
-
-            kickAnimationObject.GetComponent<SpriteRenderer>().flipX = facingLeft;
-            kickAnimationObject.transform.localPosition = new Vector3((facingLeft ? -0.1f : 0.1f), 0.1f, 0);
-            kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-
-            kickAnim.SetTrigger("Kick");
-        }
-        else
-        {
-            //AIRBORNE
-            kickAnimationObject.GetComponent<SpriteRenderer>().flipX = facingLeft;
-
-            if(lookingRotation >= -90 - stompAngle && lookingRotation <= -90 + stompAngle)
-            {
-                kickAnimationObject.transform.localPosition = new Vector3(0, -0.2f, 0);
+                kickAnimationObject.GetComponent<SpriteRenderer>().flipX = facingLeft;
+                kickAnimationObject.transform.localPosition = new Vector3((facingLeft ? -0.1f : 0.1f), 0.1f, 0);
                 kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-                kickAnim.SetTrigger("Stomp");
+
+                kickAnim.SetTrigger("Kick");
             }
-            else 
+            else
             {
-                kickAnimationObject.transform.localPosition = new Vector3(direction.x * 0.1f, direction.y * 0.1f, 0);
-                float rotation = Mathf.Atan(direction.y/direction.x) * Mathf.Rad2Deg;
-                kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, rotation);
-                kickAnim.SetTrigger("AirKick");
+                //AIRBORNE
+                kickAnimationObject.GetComponent<SpriteRenderer>().flipX = facingLeft;
+
+                if(kickLookingDirection >= -90 - stompAngle && kickLookingDirection <= -90 + stompAngle)
+                {
+                    kickAnimationObject.transform.localPosition = new Vector3(0, -0.2f, 0);
+                    kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                    kickAnim.SetTrigger("Stomp");
+                }
+                else 
+                {
+                    kickAnimationObject.transform.localPosition = new Vector3(direction.x * 0.1f, direction.y * 0.1f, 0);
+                    float rotation = Mathf.Atan(direction.y/direction.x) * Mathf.Rad2Deg;
+                    kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+                    kickAnim.SetTrigger("AirKick");
+                }
+                
             }
-            
         }
     }
 
