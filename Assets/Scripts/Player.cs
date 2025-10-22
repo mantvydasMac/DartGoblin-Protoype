@@ -93,7 +93,16 @@ public class Player : MonoBehaviour
 
             groundedPlayer = Physics2D.OverlapBox(boxCenter, boxSize, 0f, layers);
 
-            
+            if (groundedPlayer)
+            {
+                anim.SetBool("grounded", true);
+            }
+            else
+            {
+                anim.SetBool("grounded", false);
+                anim.SetFloat("velocity", rb.linearVelocity.y);
+            }
+
             if (groundedPlayer && velocity.y < 0)
             {
                 //GROUNDED
@@ -107,14 +116,12 @@ public class Player : MonoBehaviour
                 {
                     velocity.y = 5f;
                 }
-                anim.SetBool("jump", false);
             }
             else
             {
                 //AIRBORNE
                 velocity.y = rb.linearVelocity.y + (gravityValue * Time.fixedDeltaTime);
                 velocity.x = airVelocity(airSpeed * moveInput.x);
-                anim.SetBool("jump", true);
             }
 
             // Apply to rigidbody
