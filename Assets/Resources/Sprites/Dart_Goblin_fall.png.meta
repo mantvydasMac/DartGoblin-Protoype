@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4148d1297c709254aa52f9413a1d6fd8
+guid: 92ddcee65ffac1649930268da0af0fe2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8947413867333722194
-    second: Dart_Goblin_fall_0
+      213: 6294299616233406506
+    second: Dart_Goblin_fall 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Dart_Goblin_fall_0
+      name: Dart_Goblin_fall 1_0
       rect:
         serializedVersion: 2
         x: 6
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 250a4d4c1899b2c70800000000000000
-      internalID: 8947413867333722194
+      spriteID: a20487ff628d95750800000000000000
+      internalID: 6294299616233406506
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Dart_Goblin_fall_0: 8947413867333722194
+      Dart_Goblin_fall 1_0: 6294299616233406506
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
