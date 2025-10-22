@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class NoGravityBallPO : MonoBehaviour
+public class NoGravityBallPO : MonoBehaviour, PhysicsObject
 {
+    public Vector3 originalPosition {get; set; }
+
     Rigidbody2D rb;
     AudioSource audioSource;
     
@@ -12,6 +14,8 @@ public class NoGravityBallPO : MonoBehaviour
 
     void Start()
     {
+        originalPosition = transform.position;
+
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
         rb.gravityScale = 0f;
@@ -32,5 +36,11 @@ public class NoGravityBallPO : MonoBehaviour
     float pitchShift(float magnitude)
     {
         return 0.5f + (0.06f*magnitude);
+    }
+
+    public void Reset()
+    {
+        transform.position = originalPosition;
+        rb.linearVelocity = Vector2.zero;
     }
 }

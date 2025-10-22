@@ -66,6 +66,7 @@ public class Player : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         audioSource.volume = 0.8f;
         col = GetComponent<BoxCollider2D>();
+        col.excludeLayers = LayerMask.GetMask("RoomBoundary");
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         kickAnim = kickAnimationObject.GetComponent<Animator>();
@@ -78,7 +79,8 @@ public class Player : MonoBehaviour
         if(!paused) 
         {
             // camera attach
-            attachedCamera.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
+            if(attachedCamera != null)
+                attachedCamera.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
 
             LayerMask layers = LayerMask.GetMask("Ground","Object");
             // Ground check with OverlapCircle
@@ -141,9 +143,10 @@ public class Player : MonoBehaviour
 
             Vector2 sightlineEndpointVectorEnd = new Vector2(mouseWorldPos.x-sightlineStartPos.transform.position.x, mouseWorldPos.y-sightlineStartPos.transform.position.y) * sightlineLengthProportion + new Vector2(sightlineStartPos.transform.position.x, sightlineStartPos.transform.position.y);
 
+            LayerMask raycastLayers = LayerMask.GetMask("Ground","Object","RoomBoundary");
             RaycastHit2D raycast = Physics2D.Raycast(new Vector2(sightlineStartPos.position.x, sightlineStartPos.position.y), 
                                                     new Vector2(mouseWorldPos.x-sightlineStartPos.position.x, mouseWorldPos.y-sightlineStartPos.position.y), 
-                                                    sightlineLength, layers);
+                                                    sightlineLength, raycastLayers);
 
             Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(mouseWorldPos.x, mouseWorldPos.y, 0f), Color.red, Time.fixedDeltaTime);
 
