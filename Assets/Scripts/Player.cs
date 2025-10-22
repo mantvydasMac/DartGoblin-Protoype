@@ -320,7 +320,7 @@ public class Player : MonoBehaviour
                 rb.linearVelocity = new Vector2(0f, swapJumpVelocity);
                 swapJumpLeft--;
             }
-            SpawnTpParticles();
+            tpParticles.Play();
         }
     }
 
@@ -354,10 +354,5 @@ public class Player : MonoBehaviour
 
         Gizmos.color = groundedPlayer ? Color.green : Color.red;
         Gizmos.DrawWireCube(boxCenter, boxSize);
-    }
-    
-    private void SpawnTpParticles()
-    {
-        Instantiate(tpParticles, transform.position, Quaternion.identity).Play();
     }
 }
