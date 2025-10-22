@@ -68,6 +68,8 @@ public class Player : MonoBehaviour
     private HashSet<Collider2D> prevKickedCols = new HashSet<Collider2D>();
     private float kickLookingDirection;
     private Vector3 kickMousePos;
+    private Vector2 airKickCenter;
+    private bool kickFacingLeft;
     
     private bool jumpAllowed = true; 
 
@@ -232,12 +234,12 @@ public class Player : MonoBehaviour
                 if(groundedKick)
                 {
                     objectsInKickRange = Physics2D.OverlapAreaAll(new Vector2(groundCheck.position.x, groundCheck.position.y), 
-                                                        new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight));
+                                                        new Vector2(groundCheck.position.x + (kickFacingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight));
 
-                    Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), Color.purple, Time.fixedDeltaTime);
+                    Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x + (kickFacingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), Color.purple, Time.fixedDeltaTime);
                     Debug.DrawLine(new Vector2(groundCheck.position.x, groundCheck.position.y), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
-                    Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
-                    Debug.DrawLine(new Vector2(groundCheck.position.x + (facingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+                    Debug.DrawLine(new Vector2(groundCheck.position.x + (kickFacingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y), new Vector2(groundCheck.position.x + (kickFacingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
+                    Debug.DrawLine(new Vector2(groundCheck.position.x + (kickFacingLeft ? -kickRange/2 : kickRange/2), groundCheck.position.y + groundKickHeight), new Vector2(groundCheck.position.x, groundCheck.position.y + groundKickHeight), Color.purple, Time.fixedDeltaTime);
                     
                     if(kickTimeSum >= groundKickActiveTime)
                     {
@@ -246,8 +248,7 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
-                    float kickRangeProportion = kickRange/(2*playerToMouseVectorLength);
-                    Vector2 kickCircleCenter = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y) * kickRangeProportion + new Vector2(transform.position.x, transform.position.y);
+                    Vector2 kickCircleCenter = airKickCenter + new Vector2(transform.position.x, transform.position.y);
 
                     Debug.DrawLine(kickCircleCenter - new Vector2(kickRange/2, 0), kickCircleCenter + new Vector2(kickRange/2, 0), Color.purple, Time.fixedDeltaTime);
                     Debug.DrawLine(kickCircleCenter - new Vector2(0f, kickRange/2), kickCircleCenter + new Vector2(0f, kickRange/2), Color.purple, Time.fixedDeltaTime);
@@ -326,10 +327,17 @@ public class Player : MonoBehaviour
             prevKickedCols.Clear();
             kickMousePos = mouseWorldPos;
             groundedKick = groundedPlayer;
+            kickFacingLeft = facingLeft;
+
 
 
             //kick direction vector
             Vector2 direction = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y);
+
+            float kickRangeProportion = kickRange/(2*direction.magnitude);
+            airKickCenter = direction * kickRangeProportion;
+
+
             direction.Normalize();
             kickLookingDirection = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
