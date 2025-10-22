@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Data;
 
 public class Player : MonoBehaviour
 {
@@ -93,26 +94,7 @@ public class Player : MonoBehaviour
 
             groundedPlayer = Physics2D.OverlapBox(boxCenter, boxSize, 0f, layers);
 
-            if (groundedPlayer)
-            {
-                anim.SetBool("grounded", true);
-            }
-            else
-            {
-                Vector2 direction = GetDirection();
-                float lookingRotation = GetLookingRotation(direction);
-                if (IsLookingDown(lookingRotation))
-                {
-                    anim.SetBool("Stomp", true);
-                }
-                else
-                {
-                    anim.SetBool("Stomp", false);
-                }
-
-                anim.SetBool("grounded", false);
-                anim.SetFloat("velocity", rb.linearVelocity.y);
-            }
+            UpdateAirbornAnimations();
 
             if (groundedPlayer && velocity.y < 0)
             {
@@ -374,6 +356,30 @@ public class Player : MonoBehaviour
 
         Gizmos.color = groundedPlayer ? Color.green : Color.red;
         Gizmos.DrawWireCube(boxCenter, boxSize);
+    }
+
+    private void UpdateAirbornAnimations()
+    {
+        if (groundedPlayer)
+        {
+            anim.SetBool("grounded", true);
+            return;
+        }
+        
+        Vector2 direction = GetDirection();
+        float lookingRotation = GetLookingRotation(direction);
+
+        if (IsLookingDown(lookingRotation))
+        {
+            anim.SetBool("Stomp", true);
+        }
+        else
+        {
+            anim.SetBool("Stomp", false);
+        }
+
+        anim.SetBool("grounded", false);
+        anim.SetFloat("velocity", rb.linearVelocity.y);
     }
 
     private Vector2 GetDirection()
