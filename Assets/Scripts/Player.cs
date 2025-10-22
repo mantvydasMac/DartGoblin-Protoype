@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     [Header("Audio")]
     private AudioSource audioSource;
     public AudioClip kickSound;
+    public AudioClip swapSound;
 
     private float kickRange = 1.5f;
     private float groundKickHeight = 2f;
@@ -146,14 +147,7 @@ public class Player : MonoBehaviour
             mouseWorldPos.z = 0f;
 
             //facing
-            if(mouseWorldPos.x > transform.position.x)
-            {
-                facingLeft = false;
-            }
-            else
-            {
-                facingLeft = true;
-            }
+            facingLeft = !(mouseWorldPos.x > transform.position.x);
             spriteRenderer.flipX = facingLeft;
 
             // walking animation
@@ -392,6 +386,8 @@ public class Player : MonoBehaviour
                 swapJumpLeft--;
             }
             tpParticles.Play();
+            audioSource.pitch = Random.Range(0.95f, 1.05f);
+            audioSource.PlayOneShot(swapSound);
         }
     }
 

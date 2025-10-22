@@ -264,7 +264,8 @@ MonoBehaviour:
   groundRadius: 0.1
   sightlineEndpoint: {fileID: 8348231117378413969}
   sightlineStartPos: {fileID: 6247104414843600446}
-  kickSound: {fileID: 8300000, guid: 0cf9f8b1cfe4e1948bae305552df6a99, type: 3}
+  kickSound: {fileID: 8300000, guid: 944f04c22a7aff44b9b347b5acdb9fab, type: 3}
+  swapSound: {fileID: 8300000, guid: 6abfe93ae37edcb41b09d05a9a9d5f75, type: 3}
 --- !u!50 &994183471809050627
 Rigidbody2D:
   serializedVersion: 5
