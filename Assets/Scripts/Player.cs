@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
 
             groundedPlayer = Physics2D.OverlapBox(boxCenter, boxSize, 0f, layers);
 
-            UpdateAirbornAnimations();
+            UpdateAirborneAnimations();
 
             if (groundedPlayer && velocity.y < 0)
             {
@@ -421,7 +421,7 @@ public class Player : MonoBehaviour
         Gizmos.DrawWireCube(boxCenter, boxSize);
     }
 
-    private void UpdateAirbornAnimations()
+    private void UpdateAirborneAnimations()
     {
         if (groundedPlayer)
         {
