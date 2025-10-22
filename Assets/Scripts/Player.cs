@@ -99,6 +99,17 @@ public class Player : MonoBehaviour
             }
             else
             {
+                Vector2 direction = GetDirection();
+                float lookingRotation = GetLookingRotation(direction);
+                if (IsLookingDown(lookingRotation))
+                {
+                    anim.SetBool("Stomp", true);
+                }
+                else
+                {
+                    anim.SetBool("Stomp", false);
+                }
+
                 anim.SetBool("grounded", false);
                 anim.SetFloat("velocity", rb.linearVelocity.y);
             }
@@ -253,9 +264,8 @@ public class Player : MonoBehaviour
     void OnKick()
     {
         //kick direction vector
-        Vector2 direction = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y);
-        direction.Normalize();
-        float lookingRotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        Vector2 direction = GetDirection();
+        float lookingRotation = GetLookingRotation(direction);
         
         foreach(Collider2D collider in objectsInKickRange)
         {
@@ -297,11 +307,12 @@ public class Player : MonoBehaviour
             //AIRBORNE
             kickAnimationObject.GetComponent<SpriteRenderer>().flipX = facingLeft;
 
-            if(lookingRotation >= -90 - stompAngle && lookingRotation <= -90 + stompAngle)
+            if(IsLookingDown(lookingRotation))
             {
                 kickAnimationObject.transform.localPosition = new Vector3(0, -0.2f, 0);
                 kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 kickAnim.SetTrigger("Stomp");
+                anim.SetBool("Stomp", true);
             }
             else 
             {
@@ -309,6 +320,7 @@ public class Player : MonoBehaviour
                 float rotation = Mathf.Atan(direction.y/direction.x) * Mathf.Rad2Deg;
                 kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, rotation);
                 kickAnim.SetTrigger("AirKick");
+                anim.SetBool("Stomp", false);
             }
             
         }
@@ -362,5 +374,22 @@ public class Player : MonoBehaviour
 
         Gizmos.color = groundedPlayer ? Color.green : Color.red;
         Gizmos.DrawWireCube(boxCenter, boxSize);
+    }
+
+    private Vector2 GetDirection()
+    {
+        Vector2 direction = new Vector2(mouseWorldPos.x - transform.position.x, mouseWorldPos.y - transform.position.y);
+        direction.Normalize();
+        return direction;
+    }
+
+    private float GetLookingRotation(Vector2 direction)
+    {
+        return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+    }
+    
+    private bool IsLookingDown(float lookingRotation)
+    {
+        return lookingRotation >= -90 - stompAngle && lookingRotation <= -90 + stompAngle;
     }
 }
