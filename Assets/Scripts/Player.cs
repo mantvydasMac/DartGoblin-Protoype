@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Data;
 using System.Collections.Generic;
 
 public class Player : MonoBehaviour
@@ -112,7 +113,8 @@ public class Player : MonoBehaviour
 
             groundedPlayer = Physics2D.OverlapBox(boxCenter, boxSize, 0f, layers);
 
-            
+            UpdateAirbornAnimations();
+
             if (groundedPlayer && velocity.y < 0)
             {
                 //GROUNDED
@@ -131,11 +133,7 @@ public class Player : MonoBehaviour
             {
                 //AIRBORNE
                 velocity.y = rb.linearVelocity.y + (gravityValue * Time.fixedDeltaTime);
-                
-                
                 velocity.x = airVelocity(airSpeed * moveInput.x);
-
-
             }
 
             // Apply to rigidbody
@@ -353,7 +351,7 @@ public class Player : MonoBehaviour
                 //AIRBORNE
                 kickAnimationObject.GetComponent<SpriteRenderer>().flipX = facingLeft;
 
-                if(kickLookingDirection >= -90 - stompAngle && kickLookingDirection <= -90 + stompAngle)
+                if(IsLookingDown(kickLookingDirection))
                 {
                     kickAnimationObject.transform.localPosition = new Vector3(0, -0.2f, 0);
                     kickAnimationObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
@@ -421,5 +419,46 @@ public class Player : MonoBehaviour
 
         Gizmos.color = groundedPlayer ? Color.green : Color.red;
         Gizmos.DrawWireCube(boxCenter, boxSize);
+    }
+
+    private void UpdateAirbornAnimations()
+    {
+        if (groundedPlayer)
+        {
+            anim.SetBool("grounded", true);
+            return;
+        }
+        
+        Vector2 direction = GetDirection();
+        float lookingRotation = GetLookingRotation(direction);
+
+        if (IsLookingDown(lookingRotation))
+        {
+            anim.SetBool("Stomp", true);
+        }
+        else
+        {
+            anim.SetBool("Stomp", false);
+        }
+
+        anim.SetBool("grounded", false);
+        anim.SetFloat("velocity", rb.linearVelocity.y);
+    }
+
+    private Vector2 GetDirection()
+    {
+        Vector2 direction = new Vector2(mouseWorldPos.x - transform.position.x, mouseWorldPos.y - transform.position.y);
+        direction.Normalize();
+        return direction;
+    }
+
+    private float GetLookingRotation(Vector2 direction)
+    {
+        return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+    }
+    
+    private bool IsLookingDown(float lookingRotation)
+    {
+        return lookingRotation >= -90 - stompAngle && lookingRotation <= -90 + stompAngle;
     }
 }
