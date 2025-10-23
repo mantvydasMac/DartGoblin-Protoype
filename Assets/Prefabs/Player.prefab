@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8688170971608908508}
   - component: {fileID: 2050645496775894512}
   - component: {fileID: 3922798153022217595}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Kick Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6247104414843600446}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sightline Start Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 6913816638867016777}
   - component: {fileID: 6390268633729213749}
   - component: {fileID: 4770888048884937102}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -497,7 +497,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5753374475298241314}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -530,7 +530,7 @@ GameObject:
   - component: {fileID: 6155986546517986666}
   - component: {fileID: 4899524587779791803}
   - component: {fileID: 8649596424110357224}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tp Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5365,7 +5365,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4565605555881628302}
   - component: {fileID: 1972558711384804901}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sightline Endpoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
