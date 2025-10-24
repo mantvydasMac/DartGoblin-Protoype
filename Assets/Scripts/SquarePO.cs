@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SquarePO : MonoBehaviour, Resetable
+public class SquarePO : MonoBehaviour, IResetable
 {
     public Vector3 originalPosition { get; set; }
     private Quaternion originalRotation;

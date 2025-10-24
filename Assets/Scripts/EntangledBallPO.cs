@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class EntangledBallPO  : MonoBehaviour, Resetable
+public class EntangledBallPO  : MonoBehaviour, IResetable
 {
     public Vector3 originalPosition { get; set; }
 

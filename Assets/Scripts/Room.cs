@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [ExecuteAlways]
 public class Room : MonoBehaviour
@@ -13,8 +14,7 @@ public class Room : MonoBehaviour
 
     private LayerMask objectsLayerMask;
 
-    private GameObject[] roomObjects;
-    private Transform[] roomObjectOriginalTransforms;
+    private List<IResetable> roomObjects = new List<IResetable>();
 
     void Start()
     {
@@ -25,15 +25,15 @@ public class Room : MonoBehaviour
         
 
 
-        objectsLayerMask = LayerMask.GetMask("Object");
-        var colliders = Physics2D.OverlapAreaAll(boundary.topLeft, boundary.bottomRight, objectsLayerMask);
+        // objectsLayerMask = LayerMask.GetMask("Object");
+        var colliders = Physics2D.OverlapAreaAll(boundary.topLeft, boundary.bottomRight);
 
-        roomObjects = new GameObject[colliders.Length];
-        roomObjectOriginalTransforms = new Transform[colliders.Length];
+
         for(int i = 0 ;i<colliders.Length;++i)
         {
-            roomObjects[i] = colliders[i].gameObject;
-            roomObjectOriginalTransforms[i] = colliders[i].gameObject.transform;
+            var resetable = colliders[i].GetComponentInParent<IResetable>();
+            if (resetable != null)
+                roomObjects.Add(resetable);
         }
     }
 
@@ -51,9 +51,9 @@ public class Room : MonoBehaviour
             player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
         }
 
-        for(int i = 0;i<roomObjects.Length;++i)
+        foreach(var obj in roomObjects)
         {
-            roomObjects[i].GetComponent<Resetable>().Reset();
+            obj.Reset();
         }
     }
 

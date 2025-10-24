@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface Resetable
+public interface IResetable
 {
     public Vector3 originalPosition { get; set;}
 

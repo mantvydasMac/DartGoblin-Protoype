@@ -73,7 +73,8 @@ public class Player : MonoBehaviour
     private Vector2 airKickCenter;
     private bool kickFacingLeft;
     
-    private bool jumpAllowed = true; 
+    private bool jumpAllowed = true;
+    private bool swapAllowed = true;
 
     private bool paused = false;
 
@@ -208,6 +209,8 @@ public class Player : MonoBehaviour
             }
 
             //kick
+            swapAllowed = kickingStage == 0;
+
             if(kickingStage == 1)
             {// Startup
                 kickTimeSum += Time.fixedDeltaTime;
@@ -371,7 +374,7 @@ public class Player : MonoBehaviour
 
     void OnSwap()
     {
-        if(targetedObject != null)
+        if(swapAllowed && targetedObject != null)
         {
             Vector3 playerTargetPos = targetedObject.position;
             targetedObject.gameObject.GetComponent<Swappable>().swap(transform.position);
