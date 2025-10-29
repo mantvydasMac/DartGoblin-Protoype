@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 08a44a3e0957ba94dad03dde4ea319a6
+guid: ae3f47828dfb36a4da6cde9e3ede1c8c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1424858921273167655
-    second: pressure-plate_0
+      213: 847102454043003862
+    second: EntangledBall_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pressure-plate_0
+      name: EntangledBall_0
       rect:
         serializedVersion: 2
         x: 0
@@ -108,37 +108,15 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 72f8881c3ad16c310800000000000000
-      internalID: 1424858921273167655
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pressure-plate_1
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c198161747db7a04a8e1e697a1ca824b
-      internalID: 1100658704
+      spriteID: 6db489d913381cb00800000000000000
+      internalID: 847102454043003862
       vertices: []
       indices: 
       edges: []
@@ -147,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4bb9a571f95b4b242bf9c6c947d9776c
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -155,12 +133,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      pressure-plate_0: 1424858921273167655
-      pressure-plate_1: 1100658704
+      EntangledBall_0: 847102454043003862
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
