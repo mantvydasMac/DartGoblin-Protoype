@@ -188,7 +188,7 @@ PrefabInstance:
     - target: {fileID: 5004984284088341711, guid: 0550d3f710d28fb41880e9ae4c1b0161, type: 3}
       propertyPath: kickSound
       value: 
-      objectReference: {fileID: 8300000, guid: 944f04c22a7aff44b9b347b5acdb9fab, type: 3}
+      objectReference: {fileID: 8300000, guid: 5d91e6f9957d1ff4b834ba7fce226eff, type: 3}
     - target: {fileID: 5004984284088341711, guid: 0550d3f710d28fb41880e9ae4c1b0161, type: 3}
       propertyPath: attachedCamera
       value: 

@@ -16,6 +16,7 @@ public class EntangledBallPO  : MonoBehaviour, IResetable
     private float teleportLaunchSpeed = 5;
     private int teleportLaunchExcludeLayerMask;
 
+    private float scaleChangeRate = 8;
     private Vector3 originalScale;
     private float radius;
     private bool teleporting = false;
@@ -44,6 +45,7 @@ public class EntangledBallPO  : MonoBehaviour, IResetable
 
         originalPosition = transform.position;
         originalScale = transform.localScale;
+        scaleChangeRate *= originalScale.x;
     }
 
 
@@ -61,12 +63,12 @@ public class EntangledBallPO  : MonoBehaviour, IResetable
         {
             if(mode == Mode.SHRINKING)
             {
-                scale = Vector3.MoveTowards(transform.localScale, Vector3.zero, 8*Time.fixedDeltaTime);
+                scale = Vector3.MoveTowards(transform.localScale, Vector3.zero, scaleChangeRate*Time.fixedDeltaTime);
                 transform.localScale = scale;
             }
             else if(mode == Mode.EXPANDING)
             {
-                scale = Vector3.MoveTowards(transform.localScale, originalScale, 8*Time.fixedDeltaTime);
+                scale = Vector3.MoveTowards(transform.localScale, originalScale, scaleChangeRate*Time.fixedDeltaTime);
                 transform.localScale = scale;
             }
         }
