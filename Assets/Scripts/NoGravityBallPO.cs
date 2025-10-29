@@ -30,6 +30,7 @@ public class NoGravityBallPO : MonoBehaviour, IResetable
         velocity = Vector2.MoveTowards(rb.linearVelocity, Vector2.zero, airFriction * Time.fixedDeltaTime);
 
         rb.linearVelocity = velocity;
+        rb.angularVelocity = Mathf.MoveTowards(rb.angularVelocity, 0f, 20 * airFriction * Time.fixedDeltaTime);
     }
 
 

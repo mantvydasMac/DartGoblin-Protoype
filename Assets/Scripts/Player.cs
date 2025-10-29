@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     private float groundSpeed = 4;
     private float airSpeed = 4;
     private float airFriction = 25;
+    private float jumpSpeed = 6f;
 
     private Vector3 mouseWorldPos;
 
@@ -127,7 +128,7 @@ public class Player : MonoBehaviour
 
                 if(jumpAllowed && jumpPressed)
                 {
-                    velocity.y = 5f;
+                    velocity.y = jumpSpeed;
                 }
             }
             else

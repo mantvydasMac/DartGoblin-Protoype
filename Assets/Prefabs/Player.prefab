@@ -177,7 +177,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -6.45, y: 2.08, z: 0}
-  m_LocalScale: {x: 3.8716385, y: 3.3557851, z: 1}
+  m_LocalScale: {x: 3.8716385, y: 3.871639, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5753374475298241314}
@@ -264,8 +264,8 @@ MonoBehaviour:
   groundRadius: 0.1
   sightlineEndpoint: {fileID: 8348231117378413969}
   sightlineStartPos: {fileID: 6247104414843600446}
-  kickSound: {fileID: 8300000, guid: 944f04c22a7aff44b9b347b5acdb9fab, type: 3}
-  swapSound: {fileID: 8300000, guid: 6abfe93ae37edcb41b09d05a9a9d5f75, type: 3}
+  kickSound: {fileID: 8300000, guid: 5d91e6f9957d1ff4b834ba7fce226eff, type: 3}
+  swapSound: {fileID: 8300000, guid: 4bf9f3374e56b454984c4b3e7d794fa2, type: 3}
 --- !u!50 &994183471809050627
 Rigidbody2D:
   serializedVersion: 5
