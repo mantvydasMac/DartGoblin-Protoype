@@ -9,6 +9,8 @@ using Random = UnityEngine.Random;
 public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
+    public Rigidbody2D Rigidbody => rb;
+    public Vector2 ParentVelocity { get; set; }
     private BoxCollider2D col;
     private SpriteRenderer spriteRenderer;
     private Animator anim;
@@ -184,6 +186,7 @@ public class Player : MonoBehaviour
 
             // Apply to rigidbody
             rb.linearVelocity = new Vector2(velocity.x, velocity.y);
+            rb.linearVelocity += ParentVelocity;
 
 
             //sightline
