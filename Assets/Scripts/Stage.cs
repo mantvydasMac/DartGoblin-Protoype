@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 public class Stage : MonoBehaviour
 {
@@ -51,33 +52,43 @@ public class Stage : MonoBehaviour
 
     void FixedUpdate()
     {
-        playerRoom = getRoomWithPlayer();
-        Room room = rooms[playerRoom];
-
-        if(playerRoom != prevPlayerRoom)
+        try
         {
-            Boundary b = room.getBoundary();
+            playerRoom = getRoomWithPlayer();
+            Room room = rooms[playerRoom];
 
-            float roomWidth = b.topRight.x - b.topLeft.x;
-
-            float size = roomWidth / (2 * cameraAspectRatio);
-
-            if(size <= cameraMaxSize)
+            if (playerRoom != prevPlayerRoom)
             {
-                cameraTargetSize = size;
+                Boundary b = room.getBoundary();
+
+                float roomWidth = b.topRight.x - b.topLeft.x;
+
+                float size = roomWidth / (2 * cameraAspectRatio);
+
+                if (size <= cameraMaxSize)
+                {
+                    cameraTargetSize = size;
+                }
+                else
+                {
+                    cameraTargetSize = cameraMaxSize;
+                }
             }
-            else {
-                cameraTargetSize = cameraMaxSize;
-            }
+
+            cameraTargetPos = getCameraTargetPos(room);
+
+            cam.transform.position = Vector3.MoveTowards(cam.transform.position, cameraTargetPos, cameraMoveSpeed * Time.fixedDeltaTime);
+            cameraSettings.orthographicSize = Mathf.MoveTowards(cameraSettings.orthographicSize, cameraTargetSize, cameraZoomSpeed * Time.fixedDeltaTime);
+
+
+            prevPlayerRoom = playerRoom;
+
         }
-        
-        cameraTargetPos = getCameraTargetPos(room);
-
-        cam.transform.position = Vector3.MoveTowards(cam.transform.position, cameraTargetPos, cameraMoveSpeed * Time.fixedDeltaTime);
-        cameraSettings.orthographicSize = Mathf.MoveTowards(cameraSettings.orthographicSize, cameraTargetSize, cameraZoomSpeed * Time.fixedDeltaTime);
-
-
-        prevPlayerRoom = playerRoom;
+        catch (Exception)
+        {
+            playerRoom = prevPlayerRoom;
+            OnReset();
+        }
     }
 
     Vector3 getCameraTargetPos(Room room)
@@ -138,6 +149,11 @@ public class Stage : MonoBehaviour
     }
 
     void OnReset(InputAction.CallbackContext ctx)
+    {
+        rooms[playerRoom].resetRoom(player);
+    }
+
+    void OnReset()
     {
         rooms[playerRoom].resetRoom(player);
     }
