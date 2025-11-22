@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.Data;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
@@ -69,6 +71,7 @@ public class Player : MonoBehaviour
     private float kickTimeSum = 0f;
     private bool groundedKick = true;
     private HashSet<Collider2D> prevKickedCols = new HashSet<Collider2D>();
+    private Swappable targetSwappable = null;
     private float kickLookingDirection;
     private Vector3 kickMousePos;
     private Vector2 airKickCenter;
@@ -95,6 +98,47 @@ public class Player : MonoBehaviour
         kickAnim = kickAnimationObject.GetComponent<Animator>();
 
         swapJumpLeft = swapJumpLimit;
+    }
+
+    private void Update()
+    {
+        float playerToMouseVectorLength = Mathf.Sqrt(Mathf.Pow(mouseWorldPos.x-sightlineStartPos.transform.position.x, 2) + Mathf.Pow(mouseWorldPos.y-sightlineStartPos.transform.position.y, 2));
+        float sightlineLengthProportion = sightlineLength/playerToMouseVectorLength;
+
+        Vector2 sightlineEndpointVectorEnd = new Vector2(mouseWorldPos.x-sightlineStartPos.transform.position.x, mouseWorldPos.y-sightlineStartPos.transform.position.y) * sightlineLengthProportion + new Vector2(sightlineStartPos.transform.position.x, sightlineStartPos.transform.position.y);
+
+        LayerMask raycastLayers = LayerMask.GetMask("Ground", "Object", "RoomBoundary");
+        RaycastHit2D raycast = Physics2D.Raycast(new Vector2(sightlineStartPos.position.x, sightlineStartPos.position.y), 
+                                                new Vector2(mouseWorldPos.x-sightlineStartPos.position.x, mouseWorldPos.y-sightlineStartPos.position.y), 
+                                                sightlineLength, raycastLayers);
+
+        Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(mouseWorldPos.x, mouseWorldPos.y, 0f), Color.red, Time.fixedDeltaTime);
+
+        if (raycast)
+        {
+            Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(raycast.point.x, raycast.point.y, 0f), Color.green, Time.fixedDeltaTime);
+
+            Swappable swappable = raycast.collider.gameObject.GetComponent<Swappable>(); 
+            if (swappable != null)
+            {
+                swappable.Focusable.Focus();
+                targetSwappable = swappable;
+                sightlineEndpoint.transform.position = new Vector3(raycast.transform.position.x, raycast.transform.position.y, -5); //raycast.transform.position;
+                targetedObject = raycast.transform;
+            }
+            else
+            {
+                targetSwappable?.Focusable.Unfocus();
+                sightlineEndpoint.transform.position = new Vector3(raycast.point.x, raycast.point.y, 0f);
+                targetedObject = null;
+            }
+        }
+        else
+        {
+            targetSwappable?.Focusable.Unfocus();
+            targetedObject = null;
+            sightlineEndpoint.transform.position = new Vector3(sightlineEndpointVectorEnd.x, sightlineEndpointVectorEnd.y, 0f);
+        }
     }
 
     void FixedUpdate()
@@ -175,39 +219,6 @@ public class Player : MonoBehaviour
                 anim.SetBool("walkingFwd", false);
             }
 
-
-            float playerToMouseVectorLength = Mathf.Sqrt(Mathf.Pow(mouseWorldPos.x-sightlineStartPos.transform.position.x, 2) + Mathf.Pow(mouseWorldPos.y-sightlineStartPos.transform.position.y, 2));
-            float sightlineLengthProportion = sightlineLength/playerToMouseVectorLength;
-
-            Vector2 sightlineEndpointVectorEnd = new Vector2(mouseWorldPos.x-sightlineStartPos.transform.position.x, mouseWorldPos.y-sightlineStartPos.transform.position.y) * sightlineLengthProportion + new Vector2(sightlineStartPos.transform.position.x, sightlineStartPos.transform.position.y);
-
-            LayerMask raycastLayers = LayerMask.GetMask("Ground","Object","RoomBoundary");
-            RaycastHit2D raycast = Physics2D.Raycast(new Vector2(sightlineStartPos.position.x, sightlineStartPos.position.y), 
-                                                    new Vector2(mouseWorldPos.x-sightlineStartPos.position.x, mouseWorldPos.y-sightlineStartPos.position.y), 
-                                                    sightlineLength, raycastLayers);
-
-            Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(mouseWorldPos.x, mouseWorldPos.y, 0f), Color.red, Time.fixedDeltaTime);
-
-            if(raycast)
-            {
-                Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(raycast.point.x, raycast.point.y, 0f), Color.green, Time.fixedDeltaTime);
-
-                if(raycast.collider.gameObject.GetComponent<Swappable>() != null)
-                {
-                    sightlineEndpoint.transform.position = new Vector3(raycast.transform.position.x, raycast.transform.position.y, -5); //raycast.transform.position;
-                    targetedObject = raycast.transform;
-                }
-                else
-                {
-                    sightlineEndpoint.transform.position = new Vector3(raycast.point.x, raycast.point.y, 0f);
-                    targetedObject = null;
-                }
-            }
-            else
-            {
-                targetedObject = null;
-                sightlineEndpoint.transform.position = new Vector3(sightlineEndpointVectorEnd.x, sightlineEndpointVectorEnd.y, 0f);
-            }
 
             //kick
             swapAllowed = kickingStage == 0;
@@ -324,8 +335,6 @@ public class Player : MonoBehaviour
             kickMousePos = mouseWorldPos;
             groundedKick = groundedPlayer;
             kickFacingLeft = facingLeft;
-
-
 
             //kick direction vector
             Vector2 direction = new Vector2(mouseWorldPos.x-transform.position.x, mouseWorldPos.y-transform.position.y);
