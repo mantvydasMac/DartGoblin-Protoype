@@ -5508,6 +5508,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6096364234506857004, guid: 100daea41abe66149a0928646d095f44, type: 3}
+      propertyPath: stopPoints.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6096364234506857004, guid: 100daea41abe66149a0928646d095f44, type: 3}
       propertyPath: 'stopPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 455963799}
@@ -5519,6 +5523,10 @@ PrefabInstance:
       propertyPath: 'stopPoints.Array.data[2]'
       value: 
       objectReference: {fileID: 248470717}
+    - target: {fileID: 6096364234506857004, guid: 100daea41abe66149a0928646d095f44, type: 3}
+      propertyPath: initialTriggers.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6096364234506857004, guid: 100daea41abe66149a0928646d095f44, type: 3}
       propertyPath: 'initialTriggers.Array.data[0]'
       value: 
