@@ -1,11 +1,14 @@
 using UnityEngine;
 using System.Collections;
 
-public class Kickable : MonoBehaviour, IKickable
+public class CrystalBallKickable : MonoBehaviour, IKickable
 {
     [field: SerializeField]
-    public float hitstopDuration { get; set;}
+    public float hitstopDuration {get; set;}
     Rigidbody2D rb;
+
+    public bool kicked = false;
+    public bool getKicked() {return kicked;}
 
 
 
@@ -32,6 +35,8 @@ public class Kickable : MonoBehaviour, IKickable
         rb.WakeUp();
         rb.linearVelocity = vel;
         rb.angularVelocity = prevAngularVelocity;
+        kicked = true;
     }
+
 
 }

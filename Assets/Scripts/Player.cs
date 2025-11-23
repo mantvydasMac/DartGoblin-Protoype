@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
             if(attachedCamera != null)
                 attachedCamera.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
 
-            LayerMask layers = LayerMask.GetMask("Ground","Object");
+            LayerMask layers = LayerMask.GetMask("Ground","Object", "TransparentGround");
             // Ground check with OverlapCircle
             // groundedPlayer = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
             Vector2 boxSize = new Vector2(col.size.x * transform.lossyScale.x * 0.95f, 0.1f);
@@ -192,7 +192,7 @@ public class Player : MonoBehaviour
             {
                 Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(raycast.point.x, raycast.point.y, 0f), Color.green, Time.fixedDeltaTime);
 
-                if(raycast.collider.gameObject.GetComponent<Swappable>() != null)
+                if(raycast.collider.gameObject.GetComponent<ISwappable>() != null)
                 {
                     sightlineEndpoint.transform.position = new Vector3(raycast.transform.position.x, raycast.transform.position.y, -5); //raycast.transform.position;
                     targetedObject = raycast.transform;
@@ -259,7 +259,7 @@ public class Player : MonoBehaviour
                 
                 foreach(Collider2D collider in objectsInKickRange)
                 {
-                    if(collider.gameObject.GetComponent<Kickable>() != null && !prevKickedCols.Contains(collider))
+                    if(collider.gameObject.GetComponent<IKickable>() != null && !prevKickedCols.Contains(collider))
                     {
                         Vector2 kickDirection;
                         
@@ -272,20 +272,28 @@ public class Player : MonoBehaviour
                             kickDirection = new Vector2(kickMousePos.x - transform.position.x, kickMousePos.y - transform.position.y);
                         }
 
-                        collider.gameObject.GetComponent<Kickable>().kick(kickDirection.normalized * kickSpeed);
+                        collider.gameObject.GetComponent<IKickable>().kick(kickDirection.normalized * kickSpeed);
 
                         if(!groundedPlayer)
                         {
                             if(kickLookingDirection >= -90 - stompAngle && kickLookingDirection <= -90 + stompAngle)
                             {
-                                rb.linearVelocity = new Vector2(rb.linearVelocity.x, kickRecoilSpeed);
+                                if(rb.linearVelocity.y < 0)
+                                {
+                                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, kickRecoilSpeed);
+                                }
+                                else 
+                                {
+                                    rb.linearVelocity += new Vector2(0, kickRecoilSpeed);
+                                }
+                                
                                 // kickRecoilVerticalStaling -= 0.25f;
                             }
                         }
 
                         audioSource.pitch = Random.Range(0.95f, 1.05f);
                         audioSource.PlayOneShot(kickSound);
-                        StartCoroutine(HitstopCoroutine(collider.gameObject.GetComponent<Kickable>().hitstopDuration));
+                        StartCoroutine(HitstopCoroutine(collider.gameObject.GetComponent<IKickable>().hitstopDuration));
 
                         prevKickedCols.Add(collider);
                     }
@@ -378,7 +386,7 @@ public class Player : MonoBehaviour
         if(swapAllowed && targetedObject != null)
         {
             Vector3 playerTargetPos = targetedObject.position;
-            targetedObject.gameObject.GetComponent<Swappable>().swap(transform.position);
+            targetedObject.gameObject.GetComponent<ISwappable>().swap(transform.position);
             transform.position = playerTargetPos;
             targetedObject = null;
 
