@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class Swappable : MonoBehaviour
+public class Swappable : MonoBehaviour, ISwappable
 {
     [SerializeField] public Focusable focusable;
 
