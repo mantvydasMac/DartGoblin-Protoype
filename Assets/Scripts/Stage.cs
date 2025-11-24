@@ -38,6 +38,7 @@ public class Stage : MonoBehaviour
     {   
         cameraSettings = cam.GetComponent<Camera>();
         cameraAspectRatio = cameraSettings.aspect;
+        cameraMaxSize = cameraSettings.orthographicSize;
 
         var roomObjects = GameObject.FindGameObjectsWithTag("Room");
         rooms = new Room[roomObjects.Length];
