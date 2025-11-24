@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2426380353332557968
 Transform:
   m_ObjectHideFlags: 0
@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 785c8cf535a1b2c44bc358a8984d5d47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Kickable
-  hitstopDuration: 0.2
+  <hitstopDuration>k__BackingField: 0
 --- !u!114 &5275562393359049342
 MonoBehaviour:
   m_ObjectHideFlags: 0

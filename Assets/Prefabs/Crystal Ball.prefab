@@ -13,8 +13,10 @@ GameObject:
   - component: {fileID: 8266137772302797951}
   - component: {fileID: 5507111519318176332}
   - component: {fileID: 8958714140198877962}
+  - component: {fileID: 5244482011244461592}
   - component: {fileID: 3972044198555612186}
   - component: {fileID: 4522936838121936174}
+  - component: {fileID: 5124006944790962238}
   m_Layer: 8
   m_Name: Crystal Ball
   m_TagString: Untagged
@@ -170,6 +172,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57edacf0c82d1ab4292c3aceac970c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Swappable
+  focusable: {fileID: 5244482011244461592}
+--- !u!114 &5244482011244461592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6644635123985142367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1c59e0721d462aadc854775a12ba59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Focusable
+  focusedMaterial: {fileID: 2100000, guid: 24c4828f5ff368e40827e2f54713ca67, type: 2}
+  originalMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  focusLight: {fileID: 3978621055385596738, guid: bcd47e7f9e632f44598799a13a3ddcb9, type: 3}
+  focusSfx: {fileID: 8300000, guid: ad95093ea518b124097d2f1385d057cc, type: 3}
 --- !u!114 &3972044198555612186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,5 +215,102 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5000aa9e70e0eb4e8ef2add6f36aaee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CrystalBallPO
-  kickedColor: {r: 1, g: 1, b: 1, a: 1}
+  kickedColor: {r: 0.6745283, g: 1, b: 0.83417636, a: 1}
   wallCrystalObject: {fileID: 691500688919887288, guid: cb8a99c42a7849345b45416dda8c71ee, type: 3}
+--- !u!82 &5124006944790962238
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6644635123985142367}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

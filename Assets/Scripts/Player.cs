@@ -73,7 +73,7 @@ public class Player : MonoBehaviour
     private float kickTimeSum = 0f;
     private bool groundedKick = true;
     private HashSet<Collider2D> prevKickedCols = new HashSet<Collider2D>();
-    private Swappable targetSwappable = null;
+    private ISwappable targetSwappable = null;
     private float kickLookingDirection;
     private Vector3 kickMousePos;
     private Vector2 airKickCenter;
@@ -120,7 +120,7 @@ public class Player : MonoBehaviour
         {
             Debug.DrawLine(sightlineStartPos.transform.position, new Vector3(raycast.point.x, raycast.point.y, 0f), Color.green, Time.fixedDeltaTime);
 
-            Swappable swappable = raycast.collider.gameObject.GetComponent<Swappable>(); 
+            ISwappable swappable = raycast.collider.gameObject.GetComponent<ISwappable>();
             if (swappable != null)
             {
                 swappable.Focusable.Focus();
