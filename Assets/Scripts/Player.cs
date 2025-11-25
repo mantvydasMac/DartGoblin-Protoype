@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
     private float jumpSpeed = 6f;
 
     private Vector3 mouseWorldPos;
+    public Vector3 getMouseWorldPos() {return mouseWorldPos;}
+    public void setMouseWorldPos(Vector3 mouseWorldPos) {this.mouseWorldPos = mouseWorldPos;}
 
     public GameObject sightlineEndpoint;
     public Transform sightlineStartPos;
