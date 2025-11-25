@@ -33,8 +33,7 @@ public class MainMenuController : MonoBehaviour
 
     private void OnPlayButtonClicked()
     {
-        Debug.Log("Play button clicked");
-        //SceneManager.LoadScene("Stage 1 - Power Station");
+        SceneManager.LoadScene(1);
     }
 
     private void OnOptionsButtonClicked()
