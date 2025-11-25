@@ -25,6 +25,8 @@ public class Stage : MonoBehaviour
 
     void OnEnable()
     {
+        if (player == null) return;
+
         playerInput = player.GetComponent<PlayerInput>();
         resetAction = playerInput.actions["Reset"];
         resetAction.performed += OnReset;
@@ -32,6 +34,7 @@ public class Stage : MonoBehaviour
 
     void OnDisable()
     {
+        if (player == null) return;
         resetAction.performed -= OnReset;
     }
 
@@ -52,6 +55,8 @@ public class Stage : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (player == null) return;
+
         try
         {
             playerRoom = getRoomWithPlayer();
