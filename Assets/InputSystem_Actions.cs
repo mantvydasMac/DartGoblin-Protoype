@@ -145,6 +145,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RoomScope"",
+                    ""type"": ""Button"",
+                    ""id"": ""ab2deb52-cb2f-4b29-96bb-999c390095aa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -279,6 +288,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Reset"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a30b9254-bfbf-4cfe-9299-c3e068a8e094"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""RoomScope"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -354,6 +374,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Swap = m_Player.FindAction("Swap", throwIfNotFound: true);
         m_Player_Kick = m_Player.FindAction("Kick", throwIfNotFound: true);
         m_Player_Reset = m_Player.FindAction("Reset", throwIfNotFound: true);
+        m_Player_RoomScope = m_Player.FindAction("RoomScope", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -440,6 +461,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Swap;
     private readonly InputAction m_Player_Kick;
     private readonly InputAction m_Player_Reset;
+    private readonly InputAction m_Player_RoomScope;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -475,6 +497,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Reset".
         /// </summary>
         public InputAction @Reset => m_Wrapper.m_Player_Reset;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/RoomScope".
+        /// </summary>
+        public InputAction @RoomScope => m_Wrapper.m_Player_RoomScope;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -519,6 +545,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Reset.started += instance.OnReset;
             @Reset.performed += instance.OnReset;
             @Reset.canceled += instance.OnReset;
+            @RoomScope.started += instance.OnRoomScope;
+            @RoomScope.performed += instance.OnRoomScope;
+            @RoomScope.canceled += instance.OnRoomScope;
         }
 
         /// <summary>
@@ -548,6 +577,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Reset.started -= instance.OnReset;
             @Reset.performed -= instance.OnReset;
             @Reset.canceled -= instance.OnReset;
+            @RoomScope.started -= instance.OnRoomScope;
+            @RoomScope.performed -= instance.OnRoomScope;
+            @RoomScope.canceled -= instance.OnRoomScope;
         }
 
         /// <summary>
@@ -695,5 +727,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnReset(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RoomScope" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRoomScope(InputAction.CallbackContext context);
     }
 }

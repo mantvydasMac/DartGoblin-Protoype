@@ -11,6 +11,10 @@ public class WallCrystalPO : MonoBehaviour, IKickable, ISwappable
     public AudioClip explosionSound;
     public ParticleSystem explosionParticles;
 
+    [SerializeField] public Focusable focusable;
+
+    public Focusable Focusable => focusable;
+
     void Start()
     {
         hitstopDuration = explosionDelay;

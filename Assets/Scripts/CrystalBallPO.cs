@@ -50,8 +50,6 @@ public class CrystalBallPO : MonoBehaviour, IResetable
             Vector2 offset = new Vector2(0f, 0f);
             float colliderRadius = wallCrystalObject.GetComponent<CircleCollider2D>().radius * wallCrystalObject.transform.lossyScale.x;
 
-            Debug.Log($"before: {currentVelocity} | after: {velocityAfterHit}");
-
             if(Mathf.Abs(velocityAfterHit.x) < 0.001f && Mathf.Abs(currentVelocity.x) > 0.001f)
             {
                 if(currentVelocity.x > 0)
