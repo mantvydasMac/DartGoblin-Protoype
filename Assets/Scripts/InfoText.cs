@@ -1,11 +1,13 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class InfoText : MonoBehaviour
 {
     public TMP_Text text;
     public GameObject player;
     public float turnOffDistance = 3f;
+    public Light2D signLight;
 
     private int offFrameCounter = 30;
     private bool isVisible = true;
@@ -55,6 +57,7 @@ public class InfoText : MonoBehaviour
 
         isVisible = new System.Random().NextDouble() < changeToBeStable;
         color.a = isVisible ? max : min;
+        signLight.enabled = isVisible;
 
         text.color = color;
     }
