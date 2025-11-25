@@ -40982,7 +40982,7 @@ Transform:
   m_GameObject: {fileID: 890419618}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 42.369995, y: -15.48, z: -10}
+  m_LocalPosition: {x: 115.799995, y: 5.51, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43508,11 +43508,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6146888128021420563, guid: 0550d3f710d28fb41880e9ae4c1b0161, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 42.18
+      value: 115.61
       objectReference: {fileID: 0}
     - target: {fileID: 6146888128021420563, guid: 0550d3f710d28fb41880e9ae4c1b0161, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -14.87
+      value: 6.12
       objectReference: {fileID: 0}
     - target: {fileID: 6146888128021420563, guid: 0550d3f710d28fb41880e9ae4c1b0161, type: 3}
       propertyPath: m_LocalPosition.z
@@ -43588,6 +43588,7 @@ MonoBehaviour:
   cam: {fileID: 890419618}
   player: {fileID: 1633616172}
   screenFade: {fileID: 1883467129}
+  deathSound: {fileID: 8300000, guid: 55852068b21ad774ca82552847cacdf9, type: 3}
 --- !u!4 &1671155985
 Transform:
   m_ObjectHideFlags: 0

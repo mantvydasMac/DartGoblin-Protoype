@@ -22,6 +22,8 @@ public class Stage : MonoBehaviour
     private int waitCounter = 0;
     private int waitUntil = 0;
 
+    private bool allowReset = true;
+    public AudioClip deathSound;
 
     private float fadeSpeed = 5;
 
@@ -70,7 +72,7 @@ public class Stage : MonoBehaviour
 
         screenFade.transform.localScale = new Vector3(cameraMaxSize * 2 * cameraAspectRatio, cameraMaxSize*2, screenFade.transform.localScale.z);
         screenFadeRenderer = screenFade.GetComponent<SpriteRenderer>();
-        screenFadeRenderer.color = new Color(0f, 0f, 0f, 0f);
+        screenFadeRenderer.color = new Color(0f, 0f, 0f, 1f);
 
         playerScript = player.GetComponent<Player>();
 
@@ -81,6 +83,8 @@ public class Stage : MonoBehaviour
         {
             rooms[i] = roomObjects[i].GetComponent<Room>();
         }
+
+        StartCoroutine(StageStartupCoroutine());
     }
 
 
@@ -125,7 +129,7 @@ public class Stage : MonoBehaviour
         catch (Exception)
         {
             playerRoom = prevPlayerRoom;
-            OnReset();
+            OnDeath();
         }
     }
 
@@ -212,12 +216,27 @@ public class Stage : MonoBehaviour
 
     void OnReset(InputAction.CallbackContext ctx)
     {
-        // rooms[playerRoom].resetRoom(player);
-        StartCoroutine(ManualResetCoroutine());
+        if(allowReset)
+        {
+            StartCoroutine(ManualResetCoroutine());
+        }
+    }
+
+    public void OnDeath()
+    {
+        if(allowReset)
+        {
+            StartCoroutine(DeathResetCoroutine());
+        }
     }
 
     IEnumerator ManualResetCoroutine()
     {
+        allowReset = false;
+
+        fadeSpeed = 5;
+        screenFadeRenderer.color = new Color(0f, 0f, 0f, 0f);
+
         fadeStage = FadeStage.FADE_OUT;
 
         yield return new WaitUntil(() => screenFadeRenderer.color.a >= 0.99f);
@@ -245,11 +264,86 @@ public class Stage : MonoBehaviour
         screenFadeRenderer.color = new Color(screenFadeRenderer.color.r, screenFadeRenderer.color.g, screenFadeRenderer.color.b, 0f);
 
         fadeStage = FadeStage.NONE;
+        
+        allowReset = true;
     }
 
-    public void OnReset()
+    IEnumerator DeathResetCoroutine()
     {
+        allowReset = false;
+
+        fadeSpeed = 10;
+        screenFadeRenderer.color = new Color(1f, 0.6f, 0.6f, 0f);
+
+        player.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(UnityEngine.Random.Range(-5, 5), 5f);
+        PlayAtPoint(deathSound, player.transform.position);
+
+        fadeStage = FadeStage.FADE_OUT;
+
+        yield return new WaitUntil(() => screenFadeRenderer.color.a >= 0.5f);
+
+        screenFadeRenderer.color = new Color(screenFadeRenderer.color.r, screenFadeRenderer.color.g, screenFadeRenderer.color.b, 1f);
+
+        fadeStage = FadeStage.FADE_IN;
+
+        yield return new WaitUntil(() => screenFadeRenderer.color.a <= 0.01f);
+
+        screenFadeRenderer.color = new Color(screenFadeRenderer.color.r, screenFadeRenderer.color.g, screenFadeRenderer.color.b, 0f);
+
+        fadeStage = FadeStage.WAITING;
+        waitCounter = 0;
+        waitUntil = 8;
+
+        //reset fade
+        fadeSpeed = 5;
+        screenFadeRenderer.color = new Color(0f, 0f, 0f, 0f);
+
+        fadeStage = FadeStage.FADE_OUT;
+
+        yield return new WaitUntil(() => screenFadeRenderer.color.a >= 0.99f);
+
+        screenFadeRenderer.color = new Color(screenFadeRenderer.color.r, screenFadeRenderer.color.g, screenFadeRenderer.color.b, 1f);
+
         rooms[playerRoom].resetRoom(player);
+        
+        Vector3 newPos = getCameraTargetPos(rooms[playerRoom], player.transform.position);
+        cam.transform.position = newPos;
+        screenFade.transform.position = new Vector3(newPos.x, newPos.y, -9f);
+
+        fadeStage = FadeStage.WAITING;
+        waitCounter = 0;
+        waitUntil = 8;
+
+        yield return new WaitUntil(() => waitCounter >= waitUntil);
+
+        waitCounter = 0;
+
+        fadeStage = FadeStage.FADE_IN;
+
+        yield return new WaitUntil(() => screenFadeRenderer.color.a <= 0.01f);
+
+        screenFadeRenderer.color = new Color(screenFadeRenderer.color.r, screenFadeRenderer.color.g, screenFadeRenderer.color.b, 0f);
+
+        fadeStage = FadeStage.NONE;
+
+        allowReset = true;
+    }
+
+    IEnumerator StageStartupCoroutine()
+    {
+        allowReset = false;
+
+        fadeSpeed = 4;
+
+        fadeStage = FadeStage.FADE_IN;
+
+        yield return new WaitUntil(() => screenFadeRenderer.color.a <= 0.01f);
+
+        screenFadeRenderer.color = new Color(screenFadeRenderer.color.r, screenFadeRenderer.color.g, screenFadeRenderer.color.b, 0f);
+
+        fadeStage = FadeStage.NONE;
+        
+        allowReset = true;
     }
 
     private void OnRoomScopeStarted(InputAction.CallbackContext ctx)
@@ -260,5 +354,23 @@ public class Stage : MonoBehaviour
     private void OnRoomScopeCanceled(InputAction.CallbackContext ctx)
     {
         isRoomScopePressed = false;
+    }
+
+    public static void PlayAtPoint(AudioClip clip, Vector3 pos, float volume = 1.0f)
+    {
+        GameObject go = new GameObject("OneShotAudio");
+        go.transform.position = pos;
+
+        AudioSource src = go.AddComponent<AudioSource>();
+        src.clip = clip;
+        src.volume = volume;
+
+        src.spatialBlend = 1f;      // 3D sound
+        src.minDistance = 0.2f;     // MUCH louder up close
+        src.maxDistance = 30f;
+        src.rolloffMode = AudioRolloffMode.Linear;
+
+        src.Play();
+        GameObject.Destroy(go, clip.length / src.pitch);
     }
 }

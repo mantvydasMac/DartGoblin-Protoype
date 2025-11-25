@@ -10,7 +10,7 @@ public class DeathPlane : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            stage.OnReset();
+            stage.OnDeath();
         }
     }
 }
