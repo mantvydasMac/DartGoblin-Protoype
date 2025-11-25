@@ -36,7 +36,8 @@ public class Focusable : MonoBehaviour
     {
         if (!IsFocused) return;
         IsFocused = false;
-        spriteRenderer.material = originalMaterial;
+
+        if(spriteRenderer != null) spriteRenderer.material = originalMaterial;
         focusLight?.SetActive(false);
     }
 }

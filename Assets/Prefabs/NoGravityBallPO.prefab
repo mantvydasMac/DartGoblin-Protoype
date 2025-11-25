@@ -87,7 +87,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -14029860155168363, guid: 88657b1d6b9ef704380bac32268452dc, type: 3}
+  m_Sprite: {fileID: 2739395221683778795, guid: 74701246a81fb89489797f07c2a4c6dd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 785c8cf535a1b2c44bc358a8984d5d47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Kickable
-  hitstopDuration: 0.1
+  <hitstopDuration>k__BackingField: 0
 --- !u!114 &-8975287779571302486
 MonoBehaviour:
   m_ObjectHideFlags: 0
