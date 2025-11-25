@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System;
 
 public class Stage : MonoBehaviour
 {
@@ -85,37 +86,47 @@ public class Stage : MonoBehaviour
 
     void FixedUpdate()
     {
-        ScreenFading();
+        try
+        {   
+            ScreenFading();
 
-        playerRoom = getRoomWithPlayer();
-        Room room = rooms[playerRoom];
+            playerRoom = getRoomWithPlayer();
+            Room room = rooms[playerRoom];
 
-        if(playerRoom != prevPlayerRoom)
-        {
-            Boundary b = room.getBoundary();
-
-            float roomWidth = b.topRight.x - b.topLeft.x;
-
-            float size = roomWidth / (2 * cameraAspectRatio);
-
-            if(size <= cameraMaxSize)
+            if (playerRoom != prevPlayerRoom)
             {
-                cameraTargetSize = size;
+                Boundary b = room.getBoundary();
+
+                float roomWidth = b.topRight.x - b.topLeft.x;
+
+                float size = roomWidth / (2 * cameraAspectRatio);
+
+                if (size <= cameraMaxSize)
+                {
+                    cameraTargetSize = size;
+                }
+                else
+                {
+                    cameraTargetSize = cameraMaxSize;
+                }
             }
-            else {
-                cameraTargetSize = cameraMaxSize;
-            }
+
+            cameraTargetPos = getCameraTargetPos(room, isRoomScopePressed ? playerScript.getMouseWorldPos() : player.transform.position);
+
+            Vector3 newPos = Vector3.MoveTowards(cam.transform.position, cameraTargetPos, cameraMoveSpeed * Time.fixedDeltaTime);
+            cam.transform.position = newPos;
+            screenFade.transform.position = new Vector3(newPos.x, newPos.y, -9f);
+            cameraSettings.orthographicSize = Mathf.MoveTowards(cameraSettings.orthographicSize, cameraTargetSize, cameraZoomSpeed * Time.fixedDeltaTime);
+
+
+            prevPlayerRoom = playerRoom;
+
         }
-        
-        cameraTargetPos = getCameraTargetPos(room, isRoomScopePressed ? playerScript.getMouseWorldPos() : player.transform.position);
-
-        Vector3 newPos = Vector3.MoveTowards(cam.transform.position, cameraTargetPos, cameraMoveSpeed * Time.fixedDeltaTime);
-        cam.transform.position = newPos;
-        screenFade.transform.position = new Vector3(newPos.x, newPos.y, -9f);
-        cameraSettings.orthographicSize = Mathf.MoveTowards(cameraSettings.orthographicSize, cameraTargetSize, cameraZoomSpeed * Time.fixedDeltaTime);
-
-
-        prevPlayerRoom = playerRoom;
+        catch (Exception)
+        {
+            playerRoom = prevPlayerRoom;
+            OnReset();
+        }
     }
 
     void ScreenFading()
