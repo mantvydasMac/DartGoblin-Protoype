@@ -112,3 +112,7 @@
 .open {
     display: flex;
 }
+
+.label {
+    -unity-font-definition: url("project://database/Assets/TextMesh Pro/Examples & Extras/Fonts/Electronic Highway Sign.TTF?fileID=12800000&guid=8a2b9e2a607dd2143b58c44bc32410b4&type=3#Electronic Highway Sign");
+}

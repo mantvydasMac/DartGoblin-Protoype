@@ -747,6 +747,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1495082867}
   - component: {fileID: 1495082866}
+  - component: {fileID: 1495082868}
   m_Layer: 0
   m_Name: Main Menu Controller
   m_TagString: Untagged
@@ -783,6 +784,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1495082868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495082865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac75ef75b37952a4d972c5bff4e13c9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalController
 --- !u!1 &1799546562
 GameObject:
   m_ObjectHideFlags: 0

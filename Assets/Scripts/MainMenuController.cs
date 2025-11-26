@@ -56,6 +56,7 @@ public class MainMenuController : MonoBehaviour
         stage1Button.clicked += OnStage1Clicked;
 
         stage2Button = ui.Q<Button>("stage2-button");
+        stage2Button.SetEnabled(GlobalController.completedLevels >= 1);
         stage2Button.clicked += OnStage2Clicked;
     }
 
