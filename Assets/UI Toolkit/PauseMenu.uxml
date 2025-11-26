@@ -6,9 +6,9 @@
                 <ui:Label text="Paused" class="label light" />
             </ui:VisualElement>
             <ui:VisualElement class="buttons-container">
-                <ui:Button name="resume-button" text="Resume" class="menu-button light label" />
-                <ui:Button name="main-menu-button" text="Main Menu" class="menu-button light label" />
-                <ui:Button name="quit-button" text="QUIT" class="menu-button light label" />
+                <ui:Button name="resume-button" text="Resume" class="menu-button light label light-hover" />
+                <ui:Button name="main-menu-button" text="Main Menu" class="menu-button light label light-hover" />
+                <ui:Button name="quit-button" text="QUIT" class="menu-button light label light-hover" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
