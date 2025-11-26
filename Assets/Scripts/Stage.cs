@@ -8,6 +8,7 @@ public class Stage : MonoBehaviour
     public GameObject cam;
     public GameObject player;
     public GameObject screenFade;
+    public GameObject parallaxBackground;
     private SpriteRenderer screenFadeRenderer;
     private Player playerScript;
 
@@ -17,6 +18,10 @@ public class Stage : MonoBehaviour
         FADE_IN,
         WAITING
     }
+
+    private float parallaxYCoeff = 10f;
+    private float parallaxXCoeff = 17.8f;
+    private Vector3 parallaxOriginalScale; 
 
     private FadeStage fadeStage;
     private int waitCounter = 0;
@@ -74,6 +79,15 @@ public class Stage : MonoBehaviour
         screenFadeRenderer = screenFade.GetComponent<SpriteRenderer>();
         screenFadeRenderer.color = new Color(0f, 0f, 0f, 1f);
 
+        if(parallaxBackground != null)
+        {
+            parallaxOriginalScale = parallaxBackground.transform.localScale;
+            parallaxBackground.transform.localScale = new Vector3((cameraMaxSize * 2 * cameraAspectRatio * parallaxOriginalScale.x)/parallaxXCoeff, 
+                                                                (cameraMaxSize*2 * parallaxOriginalScale.y)/parallaxYCoeff, 
+                                                                parallaxBackground.transform.localScale.z);
+        } 
+        
+
         playerScript = player.GetComponent<Player>();
 
         var roomObjects = GameObject.FindGameObjectsWithTag("Room");
@@ -82,6 +96,11 @@ public class Stage : MonoBehaviour
         for(int i = 0;i<roomObjects.Length;++i)
         {
             rooms[i] = roomObjects[i].GetComponent<Room>();
+
+            if(rooms[i].cameraMaxSize == 0) 
+            {
+                rooms[i].cameraMaxSize = cameraMaxSize;
+            }
         }
 
         StartCoroutine(StageStartupCoroutine());
@@ -99,6 +118,9 @@ public class Stage : MonoBehaviour
 
             if (playerRoom != prevPlayerRoom)
             {
+                cameraMaxSize = room.cameraMaxSize;
+                screenFade.transform.localScale = new Vector3(cameraMaxSize * 2 * cameraAspectRatio, cameraMaxSize*2, screenFade.transform.localScale.z);
+                
                 Boundary b = room.getBoundary();
 
                 float roomWidth = b.topRight.x - b.topLeft.x;
@@ -117,10 +139,17 @@ public class Stage : MonoBehaviour
 
             cameraTargetPos = getCameraTargetPos(room, isRoomScopePressed ? playerScript.getMouseWorldPos() : player.transform.position);
 
-            Vector3 newPos = Vector3.MoveTowards(cam.transform.position, cameraTargetPos, cameraMoveSpeed * Time.fixedDeltaTime);
-            cam.transform.position = newPos;
-            screenFade.transform.position = new Vector3(newPos.x, newPos.y, -9f);
-            cameraSettings.orthographicSize = Mathf.MoveTowards(cameraSettings.orthographicSize, cameraTargetSize, cameraZoomSpeed * Time.fixedDeltaTime);
+            Vector3 nextPos = Vector3.MoveTowards(cam.transform.position, cameraTargetPos, cameraMoveSpeed * Time.fixedDeltaTime);
+            cam.transform.position = nextPos;
+            screenFade.transform.position = new Vector3(nextPos.x, nextPos.y, -9f);
+
+            float nextSize = Mathf.MoveTowards(cameraSettings.orthographicSize, cameraTargetSize, cameraZoomSpeed * Time.fixedDeltaTime);
+            cameraSettings.orthographicSize = nextSize;
+            if(parallaxBackground != null)
+            {
+                parallaxBackground.transform.localScale = new Vector3((nextSize * 2 * cameraAspectRatio * parallaxOriginalScale.x)/parallaxXCoeff, 
+                                                                        (nextSize * 2 * parallaxOriginalScale.y)/parallaxYCoeff, parallaxBackground.transform.localScale.z);
+            }
 
 
             prevPlayerRoom = playerRoom;

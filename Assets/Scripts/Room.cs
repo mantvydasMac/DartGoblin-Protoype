@@ -12,6 +12,8 @@ public class Room : MonoBehaviour
 
     public Transform playerRespawn;
 
+    public float cameraMaxSize = 0;
+
     private LayerMask objectsLayerMask;
 
     private List<IResetable> roomObjects = new List<IResetable>();
