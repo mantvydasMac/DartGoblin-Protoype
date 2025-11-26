@@ -79,11 +79,14 @@ public class Stage : MonoBehaviour
         screenFadeRenderer = screenFade.GetComponent<SpriteRenderer>();
         screenFadeRenderer.color = new Color(0f, 0f, 0f, 1f);
 
-        parallaxOriginalScale = parallaxBackground.transform.localScale;
-
-        parallaxBackground.transform.localScale = new Vector3((cameraMaxSize * 2 * cameraAspectRatio * parallaxOriginalScale.x)/parallaxXCoeff, 
-                                                            (cameraMaxSize*2 * parallaxOriginalScale.y)/parallaxYCoeff, 
-                                                            parallaxBackground.transform.localScale.z);
+        if(parallaxBackground != null)
+        {
+            parallaxOriginalScale = parallaxBackground.transform.localScale;
+            parallaxBackground.transform.localScale = new Vector3((cameraMaxSize * 2 * cameraAspectRatio * parallaxOriginalScale.x)/parallaxXCoeff, 
+                                                                (cameraMaxSize*2 * parallaxOriginalScale.y)/parallaxYCoeff, 
+                                                                parallaxBackground.transform.localScale.z);
+        } 
+        
 
         playerScript = player.GetComponent<Player>();
 
@@ -142,9 +145,11 @@ public class Stage : MonoBehaviour
 
             float nextSize = Mathf.MoveTowards(cameraSettings.orthographicSize, cameraTargetSize, cameraZoomSpeed * Time.fixedDeltaTime);
             cameraSettings.orthographicSize = nextSize;
-            parallaxBackground.transform.localScale = new Vector3((nextSize * 2 * cameraAspectRatio * parallaxOriginalScale.x)/parallaxXCoeff, 
-                                                                    (nextSize * 2 * parallaxOriginalScale.y)/parallaxYCoeff, parallaxBackground.transform.localScale.z);
-
+            if(parallaxBackground != null)
+            {
+                parallaxBackground.transform.localScale = new Vector3((nextSize * 2 * cameraAspectRatio * parallaxOriginalScale.x)/parallaxXCoeff, 
+                                                                        (nextSize * 2 * parallaxOriginalScale.y)/parallaxYCoeff, parallaxBackground.transform.localScale.z);
+            }
 
 
             prevPlayerRoom = playerRoom;

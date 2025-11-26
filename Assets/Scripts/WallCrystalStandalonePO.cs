@@ -1,17 +1,22 @@
 using UnityEngine;
 using System.Collections;
 
-public class WallCrystalPO : MonoBehaviour, IKickable, ISwappable, IBreakable
+public class WallCrystalStandalonePO : MonoBehaviour, IResetable, IKickable, ISwappable, IBreakable
 {
-    
+    public Vector3 originalPosition { get; set; }
+
+    private SpriteRenderer sr;
+    private Collider2D coll;
+
+
     protected float explosionRadius = 2f;
     protected float explosionLaunchSpeed = 20f;
     protected float explosionDelay = 0.15f;
 
+    private bool exploded = false;
+
     public AudioClip explosionSound;
     public ParticleSystem explosionParticles;
-
-    private bool exploded = false;
 
     [SerializeField] public Focusable focusable;
 
@@ -22,6 +27,11 @@ public class WallCrystalPO : MonoBehaviour, IKickable, ISwappable, IBreakable
         hitstopDuration = explosionDelay;
         var main = explosionParticles.main;
         main.startDelay = explosionDelay;
+
+        originalPosition = transform.position;
+
+        sr = GetComponent<SpriteRenderer>();
+        coll = GetComponent<Collider2D>();
     }
 
     // kickable
@@ -65,7 +75,7 @@ public class WallCrystalPO : MonoBehaviour, IKickable, ISwappable, IBreakable
             
         }
 
-        Destroy(gameObject);
+        disable();
     }
 
 
@@ -83,6 +93,7 @@ public class WallCrystalPO : MonoBehaviour, IKickable, ISwappable, IBreakable
         AudioSource src = go.AddComponent<AudioSource>();
         src.clip = clip;
         src.volume = volume;
+        src.pitch = Random.Range(0.95f, 1.05f);
 
         src.spatialBlend = 1f;      // 3D sound
         src.minDistance = 0.2f;     // MUCH louder up close
@@ -91,6 +102,26 @@ public class WallCrystalPO : MonoBehaviour, IKickable, ISwappable, IBreakable
 
         src.Play();
         GameObject.Destroy(go, clip.length / src.pitch);
+    }
+
+    void disable()
+    {
+        sr.enabled = false;
+		coll.enabled = false;
+    }
+
+    void enable()
+    {
+        sr.enabled = true;
+		coll.enabled = true;
+    }
+
+
+    public void Reset()
+    {
+        transform.position = originalPosition;
+        exploded = false;
+        enable();
     }
 
     public void Break()
