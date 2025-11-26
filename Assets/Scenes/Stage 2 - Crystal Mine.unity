@@ -63422,6 +63422,7 @@ MonoBehaviour:
   player: {fileID: 1633616172}
   screenFade: {fileID: 1883467129}
   parallaxBackground: {fileID: 32307461}
+  stageNumber: 2
   deathSound: {fileID: 8300000, guid: 55852068b21ad774ca82552847cacdf9, type: 3}
 --- !u!4 &1671155985
 Transform:
