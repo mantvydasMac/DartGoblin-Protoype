@@ -16,6 +16,7 @@
     height: 100%;
     width: 100%;
     border-radius: 5px;
+    display: none;
 }
 
 .options-title-container {
@@ -30,6 +31,26 @@
     display: flex;
     flex-direction: column;
     padding: 0 20px;
+}
+
+.options-credits-container {
+    /* color: rgb(154, 154, 154); */
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+.options-credits-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.options-credit-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .stage-button {
@@ -86,4 +107,8 @@
 
 .menu-button:active {
     color: rgb(231, 231, 231);
+}
+
+.open {
+    display: flex;
 }
