@@ -53,16 +53,43 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
+        <!--Stats-->
+        <ui:VisualElement name="stats-modal" class="options-container">
+            <ui:VisualElement class="options-title-container">
+                <ui:Label text="Stats" class="label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="options-buttons-container">
+                <ui:VisualElement class="options-credits-container">
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Completed stages" class="label" />
+                        <ui:Label name="completed-stages" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Stage One deaths" class="label" />
+                        <ui:Label name="stage-one-deaths" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Stage Two deaths" class="label" />
+                        <ui:Label name="stage-two-deaths" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Total deaths" class="label" />
+                        <ui:Label name="total-deaths" class="label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
         <!--Main-->
         <ui:VisualElement class="main-container">
             <ui:VisualElement class="title-container">
                 <ui:Label text="Dart Goblin" class="label" />
             </ui:VisualElement>
             <ui:VisualElement class="buttons-container">
-                <ui:Button name="play-button" text="PLAY" class="menu-button label" />
-                <ui:Button name="options-button" text="OPTIONS" class="menu-button label" />
-                <ui:Button name="credits-button" text="CREDITS" class="menu-button label" />
-                <ui:Button name="quit-button" text="QUIT" class="menu-button quit-button label" />
+                <ui:Button name="play-button" text="PLAY" class="menu-button light label" />
+                <ui:Button name="stats-button" text="STATS" class="menu-button light label" />
+                <ui:Button name="credits-button" text="CREDITS" class="menu-button light label" />
+                <ui:Button name="quit-button" text="QUIT" class="menu-button light label" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

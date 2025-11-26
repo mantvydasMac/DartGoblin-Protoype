@@ -8,7 +8,7 @@ public class MainMenuController : MonoBehaviour
     public VisualElement ui;
 
     public Button playButton;
-    public Button optionsButton;
+    public Button statsButton;
     public Button creditsButton;
     public Button quitButton;
 
@@ -17,6 +17,7 @@ public class MainMenuController : MonoBehaviour
     public Button stage2Button;
 
     public VisualElement creditsModal;
+    public VisualElement statsModal;
 
     public List<VisualElement> modals = new List<VisualElement>();
 
@@ -30,6 +31,7 @@ public class MainMenuController : MonoBehaviour
         InitMainButtons();
         InitStagesModal();
         InitCreditsModal();
+        InitStatsModal();
     }
 
     private void InitMainButtons()
@@ -37,8 +39,8 @@ public class MainMenuController : MonoBehaviour
         playButton = ui.Q<Button>("play-button");
         playButton.clicked += OnPlayButtonClicked;
 
-        optionsButton = ui.Q<Button>("options-button");
-        optionsButton.clicked += OnOptionsButtonClicked;
+        statsButton = ui.Q<Button>("stats-button");
+        statsButton.clicked += OnStatsButtonClicked;
 
         creditsButton = ui.Q<Button>("credits-button");
         creditsButton.clicked += OnCreditsButtonClicked;
@@ -66,14 +68,25 @@ public class MainMenuController : MonoBehaviour
         modals.Add(creditsModal);
     }
 
+    private void InitStatsModal()
+    {
+        statsModal = ui.Q<VisualElement>("stats-modal");
+        modals.Add(statsModal);
+
+        statsModal.Q<Label>("stage-one-deaths").text = PlayerPrefs.GetInt("stage1Deaths", 0).ToString();
+        statsModal.Q<Label>("stage-two-deaths").text = PlayerPrefs.GetInt("stage2Deaths", 0).ToString();
+        statsModal.Q<Label>("total-deaths").text = PlayerPrefs.GetInt("totalDeaths", 0).ToString();
+        statsModal.Q<Label>("completed-stages").text = PlayerPrefs.GetInt("completedStages", 0).ToString();
+    }
+
     private void OnPlayButtonClicked()
     {
         ToggleModal(stagesModal);
     }
 
-    private void OnOptionsButtonClicked()
+    private void OnStatsButtonClicked()
     {
-        CloseAllModals();
+        ToggleModal(statsModal);
     }
 
     private void OnCreditsButtonClicked()
