@@ -9,6 +9,7 @@ public class Stage : MonoBehaviour
     public GameObject player;
     public GameObject screenFade;
     public GameObject parallaxBackground;
+    public int stageNumber;
     private SpriteRenderer screenFadeRenderer;
     private Player playerScript;
 
@@ -260,6 +261,8 @@ public class Stage : MonoBehaviour
     {
         if(allowReset)
         {
+            GlobalController.AddStageDeath(stageNumber);
+            PlayerPrefs.Save();
             StartCoroutine(DeathResetCoroutine());
         }
     }
