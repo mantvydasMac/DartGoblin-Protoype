@@ -1,6 +1,6 @@
+<img src="screenshots/dart-goblin.png" width="200">
 
-
-# Dart Goblin <img src="screenshots/dart-goblin.png" width="200">
+# Dart Goblin
 A singleplayer physics-based 2D puzzle platformer where creativity meets precision.
 
 ## About
