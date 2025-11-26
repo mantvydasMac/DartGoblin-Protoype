@@ -58,7 +58,7 @@ public class MainMenuController : MonoBehaviour
         stage1Button.clicked += OnStage1Clicked;
 
         stage2Button = ui.Q<Button>("stage2-button");
-        stage2Button.SetEnabled(GlobalController.completedLevels >= 1);
+        stage2Button.SetEnabled(PlayerPrefs.GetInt("completedLevels", 0) >= 1);
         stage2Button.clicked += OnStage2Clicked;
     }
 
@@ -76,7 +76,7 @@ public class MainMenuController : MonoBehaviour
         statsModal.Q<Label>("stage-one-deaths").text = PlayerPrefs.GetInt("stage1Deaths", 0).ToString();
         statsModal.Q<Label>("stage-two-deaths").text = PlayerPrefs.GetInt("stage2Deaths", 0).ToString();
         statsModal.Q<Label>("total-deaths").text = PlayerPrefs.GetInt("totalDeaths", 0).ToString();
-        statsModal.Q<Label>("completed-stages").text = PlayerPrefs.GetInt("completedStages", 0).ToString();
+        statsModal.Q<Label>("completed-stages").text = PlayerPrefs.GetInt("completedLevels", 0).ToString();
     }
 
     private void OnPlayButtonClicked()

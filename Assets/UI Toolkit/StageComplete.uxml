@@ -1,0 +1,14 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MainMenu.uss?fileID=7433441132597879392&amp;guid=1a8c8e46250fc1041b1466f8f23bc569&amp;type=3#MainMenu" />
+    <ui:VisualElement name="stage-complete-panel" class="stage-complete panel hidden">
+        <ui:VisualElement class="stage-complete-container">
+            <ui:VisualElement class="title-container">
+                <ui:Label text="Stage Complete!" class="label light" />
+            </ui:VisualElement>
+            <ui:VisualElement class="row buttons-container">
+                <ui:Button name="main-menu-button" text="Main Menu" class="stage-complete-button light label light-hover" />
+                <ui:Button name="next-scene-button" text="Next Stage" class="stage-complete-button light label light-hover" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

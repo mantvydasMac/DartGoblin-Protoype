@@ -49,6 +49,10 @@
                         <ui:Label text="Lost and Confused" class="label" />
                         <ui:Label text="Mantvydas Maceika" class="label" />
                     </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Various sound effects" class="label" />
+                        <ui:Label text="pixabay.com" class="label" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

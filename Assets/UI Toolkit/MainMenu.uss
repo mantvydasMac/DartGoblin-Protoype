@@ -15,6 +15,11 @@
     padding: 0;
 }
 
+.stage-complete {
+    justify-content: center;
+    align-items: center;
+}
+
 .hidden {
     display: none;
 }
@@ -91,6 +96,17 @@
     padding: 24px;
 }
 
+.stage-complete-container {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 24px;
+    border-radius: 5px;
+}
+
 .title-container {
     display: flex;
     justify-content: flex-end;
@@ -116,6 +132,16 @@
     border-color: rgba(0, 0, 0, 0);
 }
 
+.stage-complete-button {
+    height: 40px;
+    font-size: 28px;
+    margin: 0 40px 20px 40px;
+    padding: 0;
+    -unity-text-align: middle-center;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
 .light {
     color: rgb(190, 190, 190);
 }
@@ -134,6 +160,10 @@
 
 .open {
     display: flex;
+}
+
+.row {
+    flex-direction: row;
 }
 
 .label {
