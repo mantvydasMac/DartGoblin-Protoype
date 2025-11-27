@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/Main Menu.unity
+    guid: dd73c34eb2b05944e9b5f5da6dca24e8
+  - enabled: 1
+    path: Assets/Scenes/Stage 1 - Power Station.unity
+    guid: 21b7f30870468d749a376e5d1eb2e91a
+  - enabled: 1
+    path: Assets/Scenes/Stage 2 - Crystal Mine.unity
+    guid: 00c59b0e5ce081a4eaff14b28f9cc1e6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

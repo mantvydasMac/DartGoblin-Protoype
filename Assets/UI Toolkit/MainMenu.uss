@@ -1,0 +1,171 @@
+:root {
+}
+
+.panel {
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    padding: 3%;
+}
+
+.paused {
+    background-color: rgba(0, 0, 0, 0.3);
+    justify-content: flex-end;
+    padding: 0;
+}
+
+.stage-complete {
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.options-container {
+    background-color: rgba(97, 97, 115, 0.6);
+    border-color: rgb(150, 179, 202);
+    border-width: 1px;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    display: none;
+}
+
+.options-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    font-size: 20px;
+}
+
+.options-buttons-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+
+.options-credits-container {
+    /* color: rgb(154, 154, 154); */
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+.options-credits-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.options-credit-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.stage-button {
+    margin: 0 0 5px 0;
+    width: 100%;
+    border-radius: 3px;
+    background-color: rgba(188, 188, 188, 0.2);
+}
+
+.stage-button:hover {
+    background-color: rgba(188, 188, 188, 0.4);
+}
+
+.main-container {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.paused-container {
+    align-items: flex-end;
+    flex-direction: column;
+    height: 100%;
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 24px;
+}
+
+.stage-complete-container {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 24px;
+    border-radius: 5px;
+}
+
+.title-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    font-size: 50px;
+    white-space: nowrap;
+    margin-bottom: 100px; 
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-button {
+    width: 100%;
+    height: 40px;
+    font-size: 28px;
+    margin: 0 0 20px 0;
+    padding: 0;
+    -unity-text-align: middle-right;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.stage-complete-button {
+    height: 40px;
+    font-size: 28px;
+    margin: 0 40px 20px 40px;
+    padding: 0;
+    -unity-text-align: middle-center;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.light {
+    color: rgb(190, 190, 190);
+}
+
+.menu-button:hover {
+    color: rgb(30, 30, 30);
+}
+
+.light-hover:hover {
+    color: rgb(140, 140, 140);
+}
+
+.menu-button:active {
+    color: rgb(80, 80, 80);
+}
+
+.open {
+    display: flex;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.label {
+    -unity-font-definition: url("project://database/Assets/TextMesh Pro/Examples & Extras/Fonts/Electronic Highway Sign.TTF?fileID=12800000&guid=8a2b9e2a607dd2143b58c44bc32410b4&type=3#Electronic Highway Sign");
+}

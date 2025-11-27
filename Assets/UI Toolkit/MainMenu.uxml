@@ -1,0 +1,100 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MainMenu.uss?fileID=7433441132597879392&amp;guid=1a8c8e46250fc1041b1466f8f23bc569&amp;type=3#MainMenu" />
+    <ui:VisualElement class="panel">
+        <!--Stages-->
+        <ui:VisualElement name="stages-modal" class="options-container">
+            <ui:VisualElement class="options-title-container">
+                <ui:Label text="Stages" class="label"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="options-buttons-container">
+                <ui:Button name="stage1-button" text="Stage One" class="stage-button label" />
+                <ui:Button name="stage2-button" text="Stage Two" class="stage-button label" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!--Credits-->
+        <ui:VisualElement name="credits-modal" class="options-container">
+            <ui:VisualElement class="options-title-container">
+                <ui:Label text="Credits" class="label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="options-buttons-container"> 
+                <!--Developers-->
+                <ui:VisualElement class="options-credits-container">
+                    <ui:VisualElement class="options-credits-title-container">
+                        <ui:Label text="Developers" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Mantvydas Maceika" class="label" />
+                        <ui:Label text="Developer" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Vilius Paskonis" class="label" />
+                        <ui:Label text="Developer" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Matas Kvainauskas" class="label" />
+                        <ui:Label text="Developer" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Martynas Ledovskojus" class="label" />
+                        <ui:Label text="Developer" class="label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <!--Audio-->
+                <ui:VisualElement class="options-credits-container">
+                    <ui:VisualElement class="options-credits-title-container">
+                        <ui:Label text="Audio" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Lost and Confused" class="label" />
+                        <ui:Label text="Mantvydas Maceika" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Various sound effects" class="label" />
+                        <ui:Label text="pixabay.com" class="label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!--Stats-->
+        <ui:VisualElement name="stats-modal" class="options-container">
+            <ui:VisualElement class="options-title-container">
+                <ui:Label text="Stats" class="label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="options-buttons-container">
+                <ui:VisualElement class="options-credits-container">
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Completed stages" class="label" />
+                        <ui:Label name="completed-stages" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Stage One deaths" class="label" />
+                        <ui:Label name="stage-one-deaths" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Stage Two deaths" class="label" />
+                        <ui:Label name="stage-two-deaths" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Total deaths" class="label" />
+                        <ui:Label name="total-deaths" class="label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!--Main-->
+        <ui:VisualElement class="main-container">
+            <ui:VisualElement class="title-container">
+                <ui:Label text="Dart Goblin" class="label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="buttons-container">
+                <ui:Button name="play-button" text="PLAY" class="menu-button light label" />
+                <ui:Button name="stats-button" text="STATS" class="menu-button light label" />
+                <ui:Button name="credits-button" text="CREDITS" class="menu-button light label" />
+                <ui:Button name="quit-button" text="QUIT" class="menu-button light label" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

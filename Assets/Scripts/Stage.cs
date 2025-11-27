@@ -9,6 +9,7 @@ public class Stage : MonoBehaviour
     public GameObject player;
     public GameObject screenFade;
     public GameObject parallaxBackground;
+    public int stageNumber;
     private SpriteRenderer screenFadeRenderer;
     private Player playerScript;
 
@@ -53,6 +54,8 @@ public class Stage : MonoBehaviour
 
     void OnEnable()
     {
+        if (player == null) return;
+
         playerInput = player.GetComponent<PlayerInput>();
         resetAction = playerInput.actions["Reset"];
         resetAction.performed += OnReset;
@@ -64,6 +67,7 @@ public class Stage : MonoBehaviour
 
     void OnDisable()
     {
+        if (player == null) return;
         resetAction.performed -= OnReset;
         roomScopeAction.started -= OnRoomScopeStarted;
         roomScopeAction.canceled -= OnRoomScopeCanceled;
@@ -109,6 +113,8 @@ public class Stage : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (player == null) return;
+
         try
         {   
             ScreenFading();
@@ -255,6 +261,8 @@ public class Stage : MonoBehaviour
     {
         if(allowReset)
         {
+            GlobalController.AddStageDeath(stageNumber);
+            PlayerPrefs.Save();
             StartCoroutine(DeathResetCoroutine());
         }
     }
