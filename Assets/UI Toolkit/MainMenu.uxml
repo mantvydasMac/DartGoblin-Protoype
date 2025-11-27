@@ -54,6 +54,24 @@
                         <ui:Label text="pixabay.com" class="label" />
                     </ui:VisualElement>
                 </ui:VisualElement>
+                <!--Assets-->
+                <ui:VisualElement class="options-credits-container">
+                    <ui:VisualElement class="options-credits-title-container">
+                        <ui:Label text="Assets" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Power Station Free Tileset" class="label" />
+                        <ui:Label text="craftpix.net" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Mine Tileset" class="label" />
+                        <ui:Label text="itch.io" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Additional assets" class="label" />
+                        <ui:Label text="Matas Kvainauskas" class="label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
 

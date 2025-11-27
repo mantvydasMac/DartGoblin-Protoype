@@ -38,8 +38,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direciton: column;
     height: 60px;
     font-size: 20px;
+}
+
+.small-text {
+    font-size: 14px;
 }
 
 .options-buttons-container {
@@ -164,6 +169,11 @@
 
 .row {
     flex-direction: row;
+}
+
+.center {
+    justify-content: center;
+    align-items: center;
 }
 
 .label {
