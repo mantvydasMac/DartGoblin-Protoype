@@ -12,10 +12,10 @@ public class MusicController : MonoBehaviour
     public AudioClip intermediaryPart;
     public AudioClip secondPart;
 
-    private float part1LoopStartTime = 5f;
-    private float part1LoopEndTime = 20f;
-    private float part2LoopStartTime = 5f;
-    private float part2LoopEndTime = 20f;
+    private float part1LoopStartTime = 17.143f;
+    private float part1LoopEndTime = 134.694f;
+    private float part2LoopStartTime = 4.174f;//2.087f;
+    private float part2LoopEndTime = 54.261f;//52.174f;
 
     private int part1LoopStartSample;
     private int part1LoopEndSample;
@@ -104,9 +104,11 @@ public class MusicController : MonoBehaviour
 
         if(stage == Stage.INTER && trigger2.activated)
         {
+            fadeSpeed = 0.05f;
             targetVol2 = 0f;
 
             targetVol1 = regularVolume;
+            as1.volume = regularVolume;
 
             as1.clip = secondPart;
 
