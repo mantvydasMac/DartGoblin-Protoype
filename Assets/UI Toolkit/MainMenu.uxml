@@ -46,7 +46,7 @@
                         <ui:Label text="Audio" class="label" />
                     </ui:VisualElement>
                     <ui:VisualElement class="options-credit-container">
-                        <ui:Label text="Lost and Confused" class="label" />
+                        <ui:Label text="Lost and Confused (Stage 1 BGM)" class="label" />
                         <ui:Label text="Mantvydas Maceika" class="label" />
                     </ui:VisualElement>
                     <ui:VisualElement class="options-credit-container">
@@ -65,11 +65,25 @@
                     </ui:VisualElement>
                     <ui:VisualElement class="options-credit-container">
                         <ui:Label text="Mine Tileset" class="label" />
-                        <ui:Label text="itch.io" class="label" />
+                        <ui:Label text="atomicrealm.itch.io" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Character design" class="label" />
+                        <ui:Label text="Vilius Paskonis" class="label" />
                     </ui:VisualElement>
                     <ui:VisualElement class="options-credit-container">
                         <ui:Label text="Additional assets" class="label" />
-                        <ui:Label text="Matas Kvainauskas" class="label" />
+                        <ui:Label text="Matas Kvainauskas, Mantvydas Maceika" class="label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <!--SpecialThanks-->
+                <ui:VisualElement class="options-credits-container">
+                    <ui:VisualElement class="options-credits-title-container">
+                        <ui:Label text="Special Thanks" class="label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="options-credit-container">
+                        <ui:Label text="Stage 2 BGM" class="label" />
+                        <ui:Label text="Zygintas Maceika" class="label" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
