@@ -116,6 +116,59 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
+        <!--Settings-->
+        <ui:VisualElement name="settings-modal" class="options-container">
+            <ui:VisualElement class="options-title-container">
+                <ui:Label text="Settings" class="label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="options-credits-title-container">
+                <ui:Label text="General" class="label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="options-buttons-container">
+                <ui:Slider 
+                    label="FPS"
+                    name="fps-slider"
+                    class="label"
+                    show-input-field="true"
+                    low-value="30"
+                    high-value="165"
+                    page-size="1"
+                    value="60" />
+            </ui:VisualElement>
+            <ui:VisualElement class="options-credits-title-container">
+                <ui:Label text="Volume" class="label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="options-buttons-container">
+                <ui:Slider 
+                    label="Master"
+                    name="master-slider"
+                    class="label"
+                    show-input-field="true"
+                    low-value="0"
+                    high-value="100"
+                    page-size="1"
+                    value="100" />
+                <ui:Slider 
+                    label="SFX"
+                    name="sfx-slider"
+                    class="label"
+                    show-input-field="true"
+                    low-value="0"
+                    high-value="100"
+                    page-size="1"
+                    value="100" />
+                <ui:Slider 
+                    label="Music"
+                    name="music-slider"
+                    class="label"
+                    show-input-field="true"
+                    low-value="0"
+                    high-value="100"
+                    page-size="1"
+                    value="100" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
         <!--Main-->
         <ui:VisualElement class="main-container">
             <ui:VisualElement class="title-container">
@@ -125,6 +178,7 @@
                 <ui:Button name="play-button" text="PLAY" class="menu-button light label" />
                 <ui:Button name="stats-button" text="STATS" class="menu-button light label" />
                 <ui:Button name="credits-button" text="CREDITS" class="menu-button light label" />
+                <ui:Button name="settings-button" text="SETTINGS" class="menu-button light label" />
                 <ui:Button name="quit-button" text="QUIT" class="menu-button light label" />
             </ui:VisualElement>
         </ui:VisualElement>

@@ -81,6 +81,7 @@ public class WallCrystalPO : MonoBehaviour, IKickable, ISwappable, IBreakable
         go.transform.position = pos;
 
         AudioSource src = go.AddComponent<AudioSource>();
+        src.outputAudioMixerGroup = AudioManager.Instance.sfxGroup;
         src.clip = clip;
         src.volume = volume;
 
