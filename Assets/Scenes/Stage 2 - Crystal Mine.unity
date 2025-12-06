@@ -56867,13 +56867,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4305165107788495698, guid: 193a17ab4da817349b9f9e1a8676a293, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 831632622}
+    - target: {fileID: 4305165107788495698, guid: 193a17ab4da817349b9f9e1a8676a293, type: 3}
       propertyPath: activatedTrigger
       value: 
       objectReference: {fileID: 283748256}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 940329214803805844, guid: 193a17ab4da817349b9f9e1a8676a293, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 193a17ab4da817349b9f9e1a8676a293, type: 3}
 --- !u!1001 &520512697
 PrefabInstance:
@@ -58218,6 +58225,7 @@ GameObject:
   - component: {fileID: 831632621}
   - component: {fileID: 831632620}
   - component: {fileID: 831632619}
+  - component: {fileID: 831632624}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -58384,7 +58392,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -58441,6 +58449,18 @@ Transform:
   - {fileID: 32307462}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &831632624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831632618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 587d9b0622667db469940d66314261e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AspectRatioController
 --- !u!1001 &832461123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60723,6 +60743,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1527417388931431263, guid: f64dcf26c4d308a4a88bad4ba4e9b323, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 831632622}
     - target: {fileID: 3235145403956276304, guid: f64dcf26c4d308a4a88bad4ba4e9b323, type: 3}
       propertyPath: m_LocalPosition.x
       value: 18.40359
@@ -60770,7 +60794,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5495958616916688656, guid: f64dcf26c4d308a4a88bad4ba4e9b323, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: f64dcf26c4d308a4a88bad4ba4e9b323, type: 3}
 --- !u!4 &1198757792 stripped
 Transform:

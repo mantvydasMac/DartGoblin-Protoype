@@ -15,8 +15,8 @@ MonoBehaviour:
   themeUss: {fileID: -4733365628477956816, guid: 83a73305367c7214ea9bf71eb8ddb1b6, type: 3}
   m_DisableNoThemeWarning: 0
   m_TargetTexture: {fileID: 0}
-  m_RenderMode: 0
-  m_ColliderUpdateMode: 0
+  m_RenderMode: 1
+  m_ColliderUpdateMode: 2
   m_ColliderIsTrigger: 1
   m_ScaleMode: 2
   m_ReferenceSpritePixelsPerUnit: 100
@@ -24,7 +24,7 @@ MonoBehaviour:
   m_Scale: 1
   m_ReferenceDpi: 96
   m_FallbackDpi: 96
-  m_ReferenceResolution: {x: 1200, y: 800}
+  m_ReferenceResolution: {x: 1777, y: 1000}
   m_ScreenMatchMode: 0
   m_Match: 0
   m_SortingOrder: 0

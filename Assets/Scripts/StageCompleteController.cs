@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UIElements;
 
-public class StageCompleteController : MonoBehaviour
+public class StageCompleteController : UIController
 {
     public VisualElement ui;
 

@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class PauseController : MonoBehaviour
+public class PauseController : UIController
 {
     public VisualElement ui;
 

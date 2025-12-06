@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class GameCompleteController : MonoBehaviour
+public class GameCompleteController : UIController
 {
     public VisualElement ui;
 
