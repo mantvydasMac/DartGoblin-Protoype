@@ -32,6 +32,8 @@ public class Player : MonoBehaviour
     private Vector2 moveInput;
     private Vector2 mousePos;
 
+    private float groundFriction = 40;
+
     private bool jumpPressed;
     private float groundSpeed = 4;
     private float airSpeed = 4;
@@ -172,7 +174,7 @@ public class Player : MonoBehaviour
 
                 velocity.y = -1f; // small downward bias keeps player snapped without sinking
 
-                velocity.x = groundSpeed * moveInput.x;
+                velocity.x = groundVelocity(groundSpeed * moveInput.x);
 
                 if(jumpAllowed && jumpPressed)
                 {
@@ -354,6 +356,11 @@ public class Player : MonoBehaviour
     float airVelocity(float targetVelocity)
     {
         return Mathf.MoveTowards(rb.linearVelocity.x, targetVelocity, airFriction * Time.fixedDeltaTime);
+    }
+
+    float groundVelocity(float targetVelocity)
+    {
+        return Mathf.MoveTowards(rb.linearVelocity.x, targetVelocity, groundFriction * Time.fixedDeltaTime);
     }
 
     void OnMove(InputValue value)
