@@ -9,20 +9,6 @@
                     <ui:Label text="Settings" class="label" />
                 </ui:VisualElement>
                 <ui:VisualElement class="options-credits-title-container">
-                    <ui:Label text="General" class="label" />
-                </ui:VisualElement>
-                <ui:VisualElement class="options-buttons-container">
-                    <ui:Slider 
-                        label="FPS"
-                        name="fps-slider"
-                        class="label"
-                        show-input-field="true"
-                        low-value="30"
-                        high-value="165"
-                        page-size="1"
-                        value="60" />
-                </ui:VisualElement>
-                <ui:VisualElement class="options-credits-title-container">
                     <ui:Label text="Volume" class="label" />
                 </ui:VisualElement>
                 <ui:VisualElement class="options-buttons-container">

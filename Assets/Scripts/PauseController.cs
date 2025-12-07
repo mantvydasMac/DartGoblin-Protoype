@@ -18,7 +18,6 @@ public class PauseController : MonoBehaviour
     public Slider masterVolSlider;
     public Slider sfxVolSlider;
     public Slider musicVolSlider;
-    public Slider fpsSlider;
 
     private void Awake()
     {
@@ -108,25 +107,6 @@ public class PauseController : MonoBehaviour
             AudioManager.Instance.SetMusicVolume(newValue/100);
 
             PlayerPrefs.SetFloat("musicVolume", newValue);
-            PlayerPrefs.Save();
-        });
-
-
-
-        //fps
-        fpsSlider = ui.Q<Slider>("fps-slider");
-        fpsSlider.value = PlayerPrefs.GetInt("fps", 60);
-        Application.targetFrameRate = (int)fpsSlider.value;
-
-        PlayerPrefs.SetInt("fps", (int)fpsSlider.value);
-        PlayerPrefs.Save();
-
-        fpsSlider.RegisterValueChangedCallback(evt =>
-        {
-            float newValue = evt.newValue;
-            Application.targetFrameRate = (int)newValue;
-
-            PlayerPrefs.SetInt("fps", (int)newValue);
             PlayerPrefs.Save();
         });
     }

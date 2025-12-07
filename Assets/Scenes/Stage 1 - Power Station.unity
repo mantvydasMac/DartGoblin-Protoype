@@ -16535,6 +16535,10 @@ PrefabInstance:
       propertyPath: size.y
       value: 26
       objectReference: {fileID: 0}
+    - target: {fileID: 7244874627259049457, guid: f346077c3072fbb48aa127e03710a50c, type: 3}
+      propertyPath: cameraMaxSize
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7565950267085371810, guid: f346077c3072fbb48aa127e03710a50c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10
