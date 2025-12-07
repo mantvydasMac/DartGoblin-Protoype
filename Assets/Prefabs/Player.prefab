@@ -266,6 +266,12 @@ MonoBehaviour:
   sightlineStartPos: {fileID: 6247104414843600446}
   kickSound: {fileID: 8300000, guid: 5d91e6f9957d1ff4b834ba7fce226eff, type: 3}
   swapSound: {fileID: 8300000, guid: 4bf9f3374e56b454984c4b3e7d794fa2, type: 3}
+  footstepSounds:
+  - {fileID: 8300000, guid: 9fbf7c4afab878a4e874fd0771d60cd2, type: 3}
+  - {fileID: 8300000, guid: 71abad609c6908d43ad840259418a3fb, type: 3}
+  - {fileID: 8300000, guid: 5254b995c42e6fe4e867bd9c8021823c, type: 3}
+  jumpSound: {fileID: 8300000, guid: b3de401224d6c324fa2726b3e0a089b6, type: 3}
+  landSound: {fileID: 8300000, guid: 5fff4f5294e079142860a4fdb7c1c5cd, type: 3}
 --- !u!50 &994183471809050627
 Rigidbody2D:
   serializedVersion: 5
