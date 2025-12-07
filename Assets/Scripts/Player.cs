@@ -61,13 +61,24 @@ public class Player : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip kickSound;
     public AudioClip swapSound;
+    public AudioClip[] footstepSounds;
+    public AudioClip jumpSound;
+
+    private string[] footstepSprites = {
+        "Dart_Goblin_walk_back_3",
+        "Dart_Goblin_walk_back_7",
+        // "Dark_goblin_run_0",
+        "Dark_goblin_run_2"
+    };
+
+    private string prevSpriteName;
 
     private float kickRange = 1.5f;
     private float groundKickHeight = 2f;
     private Collider2D[] objectsInKickRange;
     private float kickSpeed = 10f;
     private float kickRecoilSpeed = 8f;
-    private float stompAngle = 15f;
+    private float stompAngle = 30f;
 
     private float groundKickStartupTime = 0.02f;
     private float groundKickActiveTime = 0.02f;
@@ -104,6 +115,8 @@ public class Player : MonoBehaviour
         kickAnim = kickAnimationObject.GetComponent<Animator>();
 
         swapJumpLeft = swapJumpLimit;
+
+        prevSpriteName = spriteRenderer.sprite.name;
     }
 
     private void Update()
@@ -178,6 +191,9 @@ public class Player : MonoBehaviour
 
                 if(jumpAllowed && jumpPressed)
                 {
+                    audioSource.pitch = Random.Range(0.95f, 1.05f);
+                    audioSource.PlayOneShot(jumpSound);
+
                     velocity.y = jumpSpeed;
                 }
             }
@@ -201,6 +217,12 @@ public class Player : MonoBehaviour
             //facing
             facingLeft = !(mouseWorldPos.x > transform.position.x);
             spriteRenderer.flipX = facingLeft;
+
+            if(Array.IndexOf(footstepSprites, spriteRenderer.sprite.name) > -1 && prevSpriteName != spriteRenderer.sprite.name)
+            {
+                audioSource.pitch = Random.Range(0.95f, 1.05f);
+                audioSource.PlayOneShot(footstepSounds[Random.Range(0, footstepSounds.Length)]);
+            }
 
             // walking animation
             if(groundedPlayer)
@@ -352,6 +374,8 @@ public class Player : MonoBehaviour
                 }
             }
         }
+
+        prevSpriteName = spriteRenderer.sprite.name;
     }
 
     float airVelocity(float targetVelocity)
