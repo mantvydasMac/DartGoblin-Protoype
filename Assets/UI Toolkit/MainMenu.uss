@@ -96,9 +96,15 @@
     align-items: flex-end;
     flex-direction: column;
     height: 100%;
-    width: 250px;
+    width: 24%;
     background-color: rgba(0, 0, 0, 0.9);
     padding: 24px;
+}
+
+.modal {
+    height: auto;
+    width: 76%;
+    margin: 3%;
 }
 
 .stage-complete-container {

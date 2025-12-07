@@ -1,6 +1,62 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/MainMenu.uss?fileID=7433441132597879392&amp;guid=1a8c8e46250fc1041b1466f8f23bc569&amp;type=3#MainMenu" />
     <ui:VisualElement name="paused-panel" class="paused panel hidden">
+        
+        <ui:VisualElement class="modal">
+            <!--Settings-->
+            <ui:VisualElement name="settings-modal" class="options-container paused-menu">
+                <ui:VisualElement class="options-title-container">
+                    <ui:Label text="Settings" class="label" />
+                </ui:VisualElement>
+                <ui:VisualElement class="options-credits-title-container">
+                    <ui:Label text="General" class="label" />
+                </ui:VisualElement>
+                <ui:VisualElement class="options-buttons-container">
+                    <ui:Slider 
+                        label="FPS"
+                        name="fps-slider"
+                        class="label"
+                        show-input-field="true"
+                        low-value="30"
+                        high-value="165"
+                        page-size="1"
+                        value="60" />
+                </ui:VisualElement>
+                <ui:VisualElement class="options-credits-title-container">
+                    <ui:Label text="Volume" class="label" />
+                </ui:VisualElement>
+                <ui:VisualElement class="options-buttons-container">
+                    <ui:Slider 
+                        label="Master"
+                        name="master-slider"
+                        class="label"
+                        show-input-field="true"
+                        low-value="0"
+                        high-value="100"
+                        page-size="1"
+                        value="100" />
+                    <ui:Slider 
+                        label="SFX"
+                        name="sfx-slider"
+                        class="label"
+                        show-input-field="true"
+                        low-value="0"
+                        high-value="100"
+                        page-size="1"
+                        value="100" />
+                    <ui:Slider 
+                        label="Music"
+                        name="music-slider"
+                        class="label"
+                        show-input-field="true"
+                        low-value="0"
+                        high-value="100"
+                        page-size="1"
+                        value="100" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
         <ui:VisualElement class="paused-container">
             <ui:VisualElement class="title-container">
                 <ui:Label text="Paused" class="label light" />
@@ -10,59 +66,6 @@
                 <ui:Button name="main-menu-button" text="Main Menu" class="menu-button light label light-hover" />
                 <ui:Button name="settings-button" text="Settings" class="menu-button light label light-hover" />
                 <ui:Button name="quit-button" text="QUIT" class="menu-button light label light-hover" />
-            </ui:VisualElement>
-        </ui:VisualElement>
-
-        <!--Settings-->
-        <ui:VisualElement name="settings-modal" class="options-container">
-            <ui:VisualElement class="options-title-container">
-                <ui:Label text="Settings" class="label" />
-            </ui:VisualElement>
-            <ui:VisualElement class="options-credits-title-container">
-                <ui:Label text="General" class="label" />
-            </ui:VisualElement>
-            <ui:VisualElement class="options-buttons-container">
-                <ui:Slider 
-                    label="FPS"
-                    name="fps-slider"
-                    class="label"
-                    show-input-field="true"
-                    low-value="30"
-                    high-value="165"
-                    page-size="1"
-                    value="60" />
-            </ui:VisualElement>
-            <ui:VisualElement class="options-credits-title-container">
-                <ui:Label text="Volume" class="label" />
-            </ui:VisualElement>
-            <ui:VisualElement class="options-buttons-container">
-                <ui:Slider 
-                    label="Master"
-                    name="master-slider"
-                    class="label"
-                    show-input-field="true"
-                    low-value="0"
-                    high-value="100"
-                    page-size="1"
-                    value="100" />
-                <ui:Slider 
-                    label="SFX"
-                    name="sfx-slider"
-                    class="label"
-                    show-input-field="true"
-                    low-value="0"
-                    high-value="100"
-                    page-size="1"
-                    value="100" />
-                <ui:Slider 
-                    label="Music"
-                    name="music-slider"
-                    class="label"
-                    show-input-field="true"
-                    low-value="0"
-                    high-value="100"
-                    page-size="1"
-                    value="100" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
