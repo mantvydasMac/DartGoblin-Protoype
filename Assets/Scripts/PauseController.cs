@@ -39,6 +39,9 @@ public class PauseController : MonoBehaviour
         settingsButton = ui.Q<Button>("settings-button");
         settingsButton.clicked += OnSettingsButtonClicked;
 
+        quitButton = ui.Q<Button>("quit-button");
+        quitButton.clicked += OnQuitButtonClicked;
+
         InitSettingsModal();
     }
 
@@ -146,6 +149,11 @@ public class PauseController : MonoBehaviour
     private void OnSettingsButtonClicked()
     {
         ToggleModal(settingsModal);
+    }
+
+    private void OnQuitButtonClicked()
+    {
+        Application.Quit();
     }
 
     private void ToggleModal(VisualElement modal)
