@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     public Transform groundCheck;
     public float groundRadius = 0.1f;
 
-    private float gravityValue = -13f;   // custom gravity (stronger than default)
+    private float gravityValue = -13f;
     private bool groundedPlayer;
     private Vector2 velocity;
 
@@ -190,7 +190,8 @@ public class Player : MonoBehaviour
 
             // Apply to rigidbody
             rb.linearVelocity = new Vector2(velocity.x, velocity.y);
-            rb.linearVelocity += ParentVelocity;
+            if(groundedPlayer)
+                rb.linearVelocity += ParentVelocity;
 
 
             //sightline
@@ -360,7 +361,7 @@ public class Player : MonoBehaviour
 
     float groundVelocity(float targetVelocity)
     {
-        return Mathf.MoveTowards(rb.linearVelocity.x, targetVelocity, groundFriction * Time.fixedDeltaTime);
+        return Mathf.MoveTowards(rb.linearVelocity.x - ParentVelocity.x, targetVelocity, groundFriction * Time.fixedDeltaTime);
     }
 
     void OnMove(InputValue value)
