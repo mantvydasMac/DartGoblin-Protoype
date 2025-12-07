@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using System.Collections;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class MainMenuController : MonoBehaviour
     public Button playButton;
     public Button statsButton;
     public Button creditsButton;
+    public Button settingsButton;
     public Button quitButton;
 
     public VisualElement stagesModal;
@@ -18,6 +20,12 @@ public class MainMenuController : MonoBehaviour
 
     public VisualElement creditsModal;
     public VisualElement statsModal;
+    
+    public VisualElement settingsModal;
+    public Slider masterVolSlider;
+    public Slider sfxVolSlider;
+    public Slider musicVolSlider;
+    public Slider fpsSlider;
 
     public List<VisualElement> modals = new List<VisualElement>();
 
@@ -32,6 +40,8 @@ public class MainMenuController : MonoBehaviour
         InitStagesModal();
         InitCreditsModal();
         InitStatsModal();
+        InitSettingsModal();
+        StartCoroutine(SetVolumeCoroutine());
     }
 
     private void InitMainButtons()
@@ -44,6 +54,9 @@ public class MainMenuController : MonoBehaviour
 
         creditsButton = ui.Q<Button>("credits-button");
         creditsButton.clicked += OnCreditsButtonClicked;
+
+        settingsButton = ui.Q<Button>("settings-button");
+        settingsButton.clicked += OnSettingsButtonClicked;
 
         quitButton = ui.Q<Button>("quit-button");
         quitButton.clicked += OnQuitButtonClicked;
@@ -79,6 +92,90 @@ public class MainMenuController : MonoBehaviour
         statsModal.Q<Label>("completed-stages").text = PlayerPrefs.GetInt("completedLevels", 0).ToString();
     }
 
+    private void InitSettingsModal()
+    {
+        settingsModal = ui.Q<VisualElement>("settings-modal");
+        modals.Add(settingsModal);
+
+        //volume
+        masterVolSlider = ui.Q<Slider>("master-slider");
+
+        masterVolSlider.RegisterValueChangedCallback(evt =>
+        {
+            float newValue = evt.newValue;
+
+            AudioManager.Instance.SetMasterVolume(newValue/100);
+
+            PlayerPrefs.SetFloat("masterVolume", newValue);
+            PlayerPrefs.Save();
+        });
+
+        sfxVolSlider = ui.Q<Slider>("sfx-slider");
+
+        sfxVolSlider.RegisterValueChangedCallback(evt =>
+        {
+            float newValue = evt.newValue;
+
+            AudioManager.Instance.SetSFXVolume(newValue/100);
+
+            PlayerPrefs.SetFloat("sfxVolume", newValue);
+            PlayerPrefs.Save();
+        });
+
+        musicVolSlider = ui.Q<Slider>("music-slider");
+
+        musicVolSlider.RegisterValueChangedCallback(evt =>
+        {
+            float newValue = evt.newValue;
+
+            AudioManager.Instance.SetMusicVolume(newValue/100);
+
+            PlayerPrefs.SetFloat("musicVolume", newValue);
+            PlayerPrefs.Save();
+        });
+
+
+
+        //fps
+        fpsSlider = ui.Q<Slider>("fps-slider");
+        fpsSlider.value = PlayerPrefs.GetInt("fps", 60);
+        Application.targetFrameRate = (int)fpsSlider.value;
+
+        PlayerPrefs.SetInt("fps", (int)fpsSlider.value);
+        PlayerPrefs.Save();
+
+        fpsSlider.RegisterValueChangedCallback(evt =>
+        {
+            float newValue = evt.newValue;
+            Application.targetFrameRate = (int)newValue;
+
+            PlayerPrefs.SetInt("fps", (int)newValue);
+            PlayerPrefs.Save();
+        });
+    }
+
+
+    IEnumerator SetVolumeCoroutine()
+    {
+        yield return null;
+
+        float vol;
+
+        vol = PlayerPrefs.GetFloat("masterVolume", 100);
+        masterVolSlider.value = vol;
+        AudioManager.Instance.SetMasterVolume(vol/100);
+
+
+        vol = PlayerPrefs.GetFloat("sfxVolume", 100);
+        sfxVolSlider.value = vol;
+        AudioManager.Instance.SetSFXVolume(vol/100);
+
+        vol = PlayerPrefs.GetFloat("musicVolume", 100);
+        musicVolSlider.value = vol;
+        AudioManager.Instance.SetMusicVolume(vol/100);
+
+    }
+
     private void OnPlayButtonClicked()
     {
         ToggleModal(stagesModal);
@@ -92,6 +189,11 @@ public class MainMenuController : MonoBehaviour
     private void OnCreditsButtonClicked()
     {
         ToggleModal(creditsModal);
+    }
+
+    private void OnSettingsButtonClicked()
+    {
+        ToggleModal(settingsModal);
     }
 
     private void OnQuitButtonClicked()

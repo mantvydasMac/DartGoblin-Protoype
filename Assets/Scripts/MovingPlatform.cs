@@ -80,7 +80,10 @@ public class MovingPlatform : MonoBehaviour, IResetable
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        player = other.gameObject.GetComponent<Player>();
+        if(player == null)
+        {
+            player = other.gameObject.GetComponent<Player>();
+        }
     }
 
     private void OnCollisionExit2D(Collision2D other)

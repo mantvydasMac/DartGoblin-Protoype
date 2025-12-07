@@ -25,12 +25,14 @@ public class Player : MonoBehaviour
     public Transform groundCheck;
     public float groundRadius = 0.1f;
 
-    private float gravityValue = -13f;   // custom gravity (stronger than default)
+    private float gravityValue = -13f;
     private bool groundedPlayer;
     private Vector2 velocity;
 
     private Vector2 moveInput;
     private Vector2 mousePos;
+
+    private float groundFriction = 40;
 
     private bool jumpPressed;
     private float groundSpeed = 4;
@@ -172,7 +174,7 @@ public class Player : MonoBehaviour
 
                 velocity.y = -1f; // small downward bias keeps player snapped without sinking
 
-                velocity.x = groundSpeed * moveInput.x;
+                velocity.x = groundVelocity(groundSpeed * moveInput.x);
 
                 if(jumpAllowed && jumpPressed)
                 {
@@ -188,7 +190,8 @@ public class Player : MonoBehaviour
 
             // Apply to rigidbody
             rb.linearVelocity = new Vector2(velocity.x, velocity.y);
-            rb.linearVelocity += ParentVelocity;
+            if(groundedPlayer)
+                rb.linearVelocity += ParentVelocity;
 
 
             //sightline
@@ -354,6 +357,11 @@ public class Player : MonoBehaviour
     float airVelocity(float targetVelocity)
     {
         return Mathf.MoveTowards(rb.linearVelocity.x, targetVelocity, airFriction * Time.fixedDeltaTime);
+    }
+
+    float groundVelocity(float targetVelocity)
+    {
+        return Mathf.MoveTowards(rb.linearVelocity.x - ParentVelocity.x, targetVelocity, groundFriction * Time.fixedDeltaTime);
     }
 
     void OnMove(InputValue value)

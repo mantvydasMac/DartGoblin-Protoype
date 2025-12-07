@@ -91,12 +91,13 @@ public class WallCrystalStandalonePO : MonoBehaviour, IResetable, IKickable, ISw
         go.transform.position = pos;
 
         AudioSource src = go.AddComponent<AudioSource>();
+        src.outputAudioMixerGroup = AudioManager.Instance.sfxGroup;
         src.clip = clip;
         src.volume = volume;
         src.pitch = Random.Range(0.95f, 1.05f);
 
-        src.spatialBlend = 1f;      // 3D sound
-        src.minDistance = 0.2f;     // MUCH louder up close
+        src.spatialBlend = 1f;
+        src.minDistance = 0.2f;
         src.maxDistance = 30f;
         src.rolloffMode = AudioRolloffMode.Linear;
 
