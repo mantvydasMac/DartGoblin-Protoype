@@ -1,26 +1,9 @@
 <img src="screenshots/dart-goblin.png" width="200">
 
-# Dart Goblin
-A singleplayer physics-based 2D puzzle platformer where creativity meets precision.
+**Dart Goblin** - is a student made singleplayer physics based 2D puzzle platformer, where the player will have to solve various puzzles and platforming challenges by interacting with different physics objects, some simple (basic spheres, cubes), others more unorthodox (spheres unaffected by gravity, exploding crystals, etc.). The player will manipulate these objects by kicking them, launching the object in the direction the player is facing.
 
-## About
+In addition to kicking, the player also possesses the ability to instantly swap places with any physics object in direct line of sight. Combining these two mechanics, as well as the unique characteristics and gimmicks of different physics objects, the player will overcome everything from precise object positioning puzzles to platforming challenges that engage the player’s spatial awareness and timing by combining traditional platforming with instantaneous teleporting movement.
 
-**Dart Goblin** challenges players to solve intricate puzzles and platforming challenges through physics manipulation. Navigate through levels by interacting with diverse physics objects—from simple spheres and cubes to gravity-defying orbs and explosive crystals. Master the art of kicking objects and teleportation to overcome obstacles that test your spatial awareness, timing, and problem-solving skills.
-
-## Core Mechanics
-
-### Kicking
-Launch physics objects in any direction by kicking them toward your cursor. Use downward kicks while airborne to bounce upward, adding a layer of verticality to your movement options.
-
-### Teleportation
-Instantly swap places with any physics object in your line of sight (if the object is swappable). Combine this with the kick mechanic to solve complex puzzles that blend traditional platforming with instantaneous movement.
-
-### Physics Objects
-Encounter a variety of objects with unique properties:
-- **Standard objects**: Basic spheres and cubes
-- **Gravity-immune spheres**: Objects unaffected by gravity
-- **Exploding crystals**: Volatile objects that add explosive solutions to puzzles
-- And more unique mechanics to discover...
 
 ## Controls
 
@@ -35,9 +18,3 @@ Encounter a variety of objects with unique properties:
 | **R** | Reset current room |
 | **C + Mouse** | Move camera to scout the room |
 | **Esc** | Pause game |
-
-
-
----
-
-*Master the kick. Perfect the swap. Become the Dart Goblin.*
